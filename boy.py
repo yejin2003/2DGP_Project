@@ -41,26 +41,29 @@ class Idle:
 
     @staticmethod
     def draw(boy):
-        boy.image.clip_draw(boy.frame * 54, boy.action * 69, 54, 69, boy.x, boy.y)
+        boy.image.clip_draw(boy.frame * 62, boy.action * 69, 62, 69, boy.x, boy.y)
 
 class Run:
-     @staticmethod
-     def enter(boy, e):
-         if right_down(e) or left_up(e):
-             boy.dir, boy.action = 1, 9
-         elif left_down(e) or right_up(e):
-             boy.dir, boy.action = -1, 9
-     @staticmethod
-     def exit(boy, e):
-         pass
-     @staticmethod
-     def do(boy):
-         boy.frame = (boy.frame + 1) % 8
-         boy.x += boy.dir * 5
-         pass
-     @staticmethod
-     def draw(boy):
-         boy.image.clip_draw(boy.frame * 44, boy.action * 69, 44, 69, boy.x, boy.y)
+    @staticmethod
+    def enter(boy, e):
+        if right_down(e) or left_up(e):
+            boy.dir, boy.action = 1, 9  # Run의 경우 두 번째 줄
+        elif left_down(e) or right_up(e):
+            boy.dir, boy.action = -1, 9
+
+    @staticmethod
+    def exit(boy, e):
+        pass
+
+    @staticmethod
+    def do(boy):
+        boy.frame = (boy.frame + 1) % 6  # 총 프레임 수가 6개라고 가정
+        boy.x += boy.dir * 5
+
+    @staticmethod
+    def draw(boy):
+        # Run 상태의 두 번째 줄 프레임을 정확하게 그리기 위해 action 값을 확인하고 조정
+        boy.image.clip_draw(boy.frame * 62, boy.action * 69, 62, 69, boy.x, boy.y)
 
 class StateMachine:
     def __init__(self, boy):
