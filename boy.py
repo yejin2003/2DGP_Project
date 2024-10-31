@@ -18,8 +18,6 @@ def left_down(e):
 def left_up(e):
      return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
-def a_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
 
 class Idle:
     @staticmethod
@@ -51,6 +49,7 @@ class Run:
         elif left_down(e) or right_up(e):
             boy.dir, boy.action = -1, 9
 
+
     @staticmethod
     def exit(boy, e):
         pass
@@ -62,8 +61,16 @@ class Run:
 
     @staticmethod
     def draw(boy):
-        # Run 상태의 두 번째 줄 프레임을 정확하게 그리기 위해 action 값을 확인하고 조정
-        boy.image.clip_draw(boy.frame * 62, boy.action * 69, 62, 69, boy.x, boy.y)
+        if boy.dir == 1:
+            # 오른쪽 이동 시 이미지 반전
+            boy.image.clip_composite_draw(
+                boy.frame * 62, boy.action * 69, 62, 69, 0, 'h', boy.x, boy.y, 54, 69
+            )
+        else:
+            # 왼쪽 이동 시 그대로 그림
+            boy.image.clip_draw(
+                boy.frame * 62, boy.action * 69, 62, 69, boy.x, boy.y
+            )
 
 class StateMachine:
     def __init__(self, boy):
