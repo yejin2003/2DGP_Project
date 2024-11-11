@@ -40,7 +40,6 @@ class Idle:
             # 현재 이동 방향을 Idle 상태에서 유지하도록 설정
             boy.dir = boy.dir1  # dir1 값으로 Idle 상태에서 방향 설정
         else:
-            boy.dir = 0  # Idle로 처음 진입 시 정지
             boy.frame = 0
             boy.action=8
         boy.wait_time = get_time()
