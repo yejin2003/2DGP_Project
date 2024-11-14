@@ -37,7 +37,6 @@ class Idle:
     def enter(boy, e):
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
             boy.action = 8
-            # 현재 이동 방향을 Idle 상태에서 유지하도록 설정
             boy.dir = boy.dir1  # dir1 값으로 Idle 상태에서 방향 설정
         else:
             boy.frame = 0
@@ -57,7 +56,7 @@ class Idle:
     def draw(boy):
         if boy.dir == 1:  # 오른쪽
             boy.image.clip_composite_draw(
-                boy.frame * 62, boy.action * 69, 62, 69, 0, 'h', boy.x, boy.y, 54, 69
+                boy.frame * 62, boy.action * 69, 62, 69, 0, 'h', boy.x, boy.y, 62, 69
             )
         else:  # 왼쪽
             boy.image.clip_draw(
@@ -102,7 +101,7 @@ class Run:
     def draw(boy):
         if boy.dir1 == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 62, boy.action * 69, 62, 69, 0, 'h', boy.x, boy.y, 54, 69
+                boy.frame * 62, boy.action * 69, 62, 69, 0, 'h', boy.x, boy.y, 62, 69
             )
         else:
             boy.image.clip_draw(
@@ -113,13 +112,13 @@ class Attack:
     @staticmethod
     def enter(boy, e):
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
-            boy.action = 7
+            boy.action = 4
             # 현재 이동 방향을 Idle 상태에서 유지하도록 설정
             boy.dir = boy.dir1  # dir1 값으로 Idle 상태에서 방향 설정
         else:
             boy.dir = 0  # Idle로 처음 진입 시 정지
             boy.frame = 0
-            boy.action=7
+            boy.action=4
         boy.wait_time = get_time()
         pass
 
@@ -130,17 +129,16 @@ class Attack:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 6
-        boy.x += boy.dir * 5
 
     @staticmethod
     def draw(boy):
         if boy.dir1 == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 62, boy.action * 70, 62, 70, 0, 'h', boy.x, boy.y, 54, 69
+                boy.frame * 100, boy.action * 75, 70, 80, 0, 'h', boy.x, boy.y, 70, 80
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 62, boy.action * 70, 62, 70, boy.x, boy.y
+                boy.frame * 100, boy.action * 75, 70, 80, boy.x, boy.y
             )
 
 class StateMachine:
