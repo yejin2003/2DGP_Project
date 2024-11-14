@@ -134,11 +134,11 @@ class Attack:
     def draw(boy):
         if boy.dir1 == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 100, boy.action * 75, 70, 80, 0, 'h', boy.x, boy.y, 70, 80
+                boy.frame * 80, boy.action * 73, 82, 88, 0, 'h', boy.x, boy.y, 72, 75
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 100, boy.action * 75, 70, 80, boy.x, boy.y
+                boy.frame * 80, boy.action * 73, 82, 88, boy.x, boy.y, 72, 75
             )
 
 class StateMachine:

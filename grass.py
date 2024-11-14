@@ -16,3 +16,10 @@ class Grass:
         while x < screen_width:
             self.image.clip_draw(107, 30, 107, 30, x, y_position, 300, 40)
             x += 107 # 확대된 타일 너비만큼 오른쪽으로 이동
+
+        x=0
+        while x < 400:
+            self.image.clip_draw(107, 30, 107, 30, x, 200, 300, 40)
+            #x += 107  # 확대된 타일 너비만큼 오른쪽으로 이동
+
+
