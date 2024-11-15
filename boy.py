@@ -128,17 +128,17 @@ class Attack:
 
     @staticmethod
     def do(boy):
-        boy.frame = (boy.frame + 1) % 6
+        boy.frame = (boy.frame + 1) % 4
 
     @staticmethod
     def draw(boy):
         if boy.dir1 == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 80, boy.action * 73, 82, 88, 0, 'h', boy.x, boy.y, 72, 75
+                boy.frame * 75, boy.action * 73, 80, 88, 0, 'h', boy.x, boy.y, 79, 88
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 80, boy.action * 73, 82, 88, boy.x, boy.y, 72, 75
+                boy.frame * 75, boy.action * 73, 80, 88, boy.x, boy.y, 79, 88
             )
 
 class StateMachine:
