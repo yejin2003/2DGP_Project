@@ -16,8 +16,17 @@ class Grass:
         for x in range(0, screen_width, tile_width):
             self.image.clip_draw(107, 30, 107, 30, x, y_position, 300, 40)
 
-        for x in range(0, 300, tile_width):
-            self.image.clip_draw(107, 30, 50, 30, x, 130, 300, 40)
+        for x in range(0, 350, tile_width):
+            self.image.clip_draw(107, 30, 50, 30, x, 120, 300, 40)
 
-        for x in range(600, 800, tile_width):
-            self.image.clip_draw(107, 30, 50, 30, x, 180, 300, 40)
+        for x in range(550, 800, tile_width):
+            self.image.clip_draw(107, 30, 50, 30, x, 210, 300, 40)
+
+        for x in range(0, 350, tile_width):
+            self.image.clip_draw(107, 30, 50, 30, x, 300, 300, 40)
+
+        for x in range(550, 800, tile_width):
+            self.image.clip_draw(107, 30, 50, 30, x, 390, 300, 40)
+
+        for x in range(0, 350, tile_width):
+            self.image.clip_draw(107, 30, 50, 30, x, 480, 300, 40)
