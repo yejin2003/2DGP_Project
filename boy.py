@@ -114,10 +114,9 @@ class Run:
             boy.y += boy.dir2 * 5  # y축 이동
 
         if boy.is_jumping:
-            while boy.y < boy.jump_start_y + 20:  # 목표 높이에 도달할 때까지
-                boy.y += 0.1  # 상승
-            boy.is_jumping = False
-            boy.y = boy.jump_start_y
+            boy.y += 0.1  # 매 프레임마다 상승
+            if boy.y >= boy.jump_start_y + 50:  # 목표 높이에 도달
+                boy.is_jumping = False  # 점프 종료
 
     @staticmethod
     def draw(boy):
