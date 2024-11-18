@@ -114,12 +114,10 @@ class Run:
             boy.y += boy.dir2 * 5  # y축 이동
 
         if boy.is_jumping:
-            boy.jump_time += 0.1
-            height = 50 * math.sin(boy.jump_time)  # 포물선 운동 높이
-            boy.y = boy.jump_start_y + height
-            if boy.jump_time >= math.pi:  # 점프 완료
-                boy.is_jumping = False
-                boy.y = boy.jump_start_y  # 원래 높이로 복구
+            while boy.y < boy.jump_start_y + 20:  # 목표 높이에 도달할 때까지
+                boy.y += 0.1  # 상승
+            boy.is_jumping = False
+            boy.y = boy.jump_start_y
 
     @staticmethod
     def draw(boy):
