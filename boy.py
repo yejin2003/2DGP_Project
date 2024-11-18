@@ -98,6 +98,8 @@ class Run:
             boy.is_jumping = True
             boy.jump_start_y = boy.y
             boy.jump_time = 0
+        elif space_up(e):
+            boy.is_jumping = False
 
 
     @staticmethod
@@ -115,8 +117,9 @@ class Run:
 
         if boy.is_jumping:
             boy.y += 0.1  # 매 프레임마다 상승
-            if boy.y >= boy.jump_start_y + 50:  # 목표 높이에 도달
-                boy.is_jumping = False  # 점프 종료
+            if boy.y >= boy.jump_start_y + 100:  # 목표 높이에 도달
+                boy.y= boy.jump_start_y
+                boy.state_machine.add_event(('TIME_OUT', 0))
 
     @staticmethod
     def draw(boy):
@@ -130,17 +133,23 @@ class Run:
             )
 
 class Attack:
+    # 각 프레임의 왼쪽 하단 시작 좌표와 너비 및 높이를 정의
+    sprite_frames = [
+        (0, 292, 50, 94),  # 첫 번째 프레임
+        (44, 292, 50, 94),  # 두 번째 프레임
+        (89, 292, 85, 94),  # 세 번째 프레임
+        (154, 292, 85, 94),  # 네 번째 프레임
+        (219, 292, 85, 94),  # 다섯 번째 프레임
+        (284, 292, 85, 94)  # 여섯 번째 프레임
+    ]
+
     @staticmethod
     def enter(boy, e):
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
-            boy.action = 4
-            # 현재 이동 방향을 Idle 상태에서 유지하도록 설정
-            boy.dir = boy.dir1  # dir1 값으로 Idle 상태에서 방향 설정
+            boy.dir = boy.dir1  # Run 상태의 방향을 유지
         else:
             boy.frame = 0
-            boy.action=4
         boy.wait_time = get_time()
-        pass
 
     @staticmethod
     def exit(boy, e):
@@ -148,17 +157,22 @@ class Attack:
 
     @staticmethod
     def do(boy):
-        boy.frame = (boy.frame + 1) % 4
+        # 프레임 업데이트
+        boy.frame = (boy.frame + 1) % len(Attack.sprite_frames)
 
     @staticmethod
     def draw(boy):
-        if boy.dir1 == 1:
+        # 현재 프레임의 좌표와 크기 가져오기
+        frame = Attack.sprite_frames[boy.frame]
+        x, y, width, height = frame
+
+        if boy.dir1 == 1:  # 오른쪽 방향
             boy.image.clip_composite_draw(
-                boy.frame * 75, boy.action * 73, 80, 88, 0, 'h', boy.x, boy.y, 79, 88
+                x, y, width, height, 0, 'h', boy.x, boy.y, width, height
             )
-        else:
+        else:  # 왼쪽 방향
             boy.image.clip_draw(
-                boy.frame * 75, boy.action * 73, 80, 88, boy.x, boy.y, 79, 88
+                x, y, width, height, boy.x, boy.y
             )
 
 class StateMachine:
