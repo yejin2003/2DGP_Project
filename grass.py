@@ -9,24 +9,29 @@ class Grass:
 
     def draw(self):
         screen_width = 800  # 화면의 너비 (필요에 따라 변경)
-        y_position = 16  # 바닥에 맞춰 위치 조정
         tile_width = 107  # 타일 너비
 
         # 화면 너비를 채울 때까지 타일을 그립니다.
         for x in range(0, screen_width, tile_width):
-            self.image.clip_draw(107, 30, 107, 30, x, y_position, 300, 40)
+            self.image.clip_draw(107, 30, 107, 30, x, 30, 300, 60)
 
-        for x in range(0, 350, tile_width):
-            self.image.clip_draw(107, 30, 50, 30, x, 120, 300, 40)
+        for x in range(0, 250, tile_width):
+            self.image.clip_draw(107, 30, 50, 30, x, 140, 300, 50)
 
-        for x in range(550, 800, tile_width):
-            self.image.clip_draw(107, 30, 50, 30, x, 210, 300, 40)
+        for x in range(570, 800, tile_width):
+            self.image.clip_draw(107, 30, 50, 30, x, 250, 300, 50)
 
-        for x in range(0, 350, tile_width):
-            self.image.clip_draw(107, 30, 50, 30, x, 300, 300, 40)
+        for x in range(0, 250, tile_width):
+            self.image.clip_draw(107, 30, 50, 30, x, 250, 300, 50)
 
-        for x in range(550, 800, tile_width):
-            self.image.clip_draw(107, 30, 50, 30, x, 390, 300, 40)
+        for x in range(0, 100, tile_width):
+            self.image.clip_draw(107, 30, 50, 30, x, 360, 300, 50)
 
-        for x in range(0, 350, tile_width):
-            self.image.clip_draw(107, 30, 50, 30, x, 480, 300, 40)
+        for x in range(350, 500, tile_width):
+            self.image.clip_draw(107, 30, 50, 30, x, 360, 300, 50)
+
+        for x in range(500, 800, tile_width):
+            self.image.clip_draw(107, 30, 50, 30, x, 470, 300, 50)
+
+
+

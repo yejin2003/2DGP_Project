@@ -2,9 +2,11 @@ from pico2d import *
 import math
 
 
-
 def space_down(e):
      return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
+def space_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_SPACE
+
 
 def time_out(e):
      return e[0] == 'TIME_OUT'
@@ -68,22 +70,35 @@ class Run:
     @staticmethod
     def enter(boy, e):
         if right_down(e) or left_up(e):
+            boy.is_jumping = False
             boy.dir1, boy.action = 1, 9  # 오른쪽 이동
             boy.dir2=0
         elif left_down(e) or right_up(e):
+            boy.is_jumping = False
             boy.dir1, boy.action = -1, 9  # 왼쪽 이동
             boy.dir2 = 0
 
         if up_down(e):
+            boy.is_jumping = False
             boy.dir2, boy.action = 1, 9  # 위 이동
             boy.dir1 = 0
         elif up_up(e):
+            boy.is_jumping = False
             boy.dir2 = 0
-        elif down_down(e):  # 아래 이동 처리 추가
+
+        if down_down(e):  # 아래 이동 처리 추가
             boy.dir2, boy.action = -1, 9
+            boy.is_jumping = False
             boy.dir1 = 0
         elif down_up(e):
+            boy.is_jumping = False
             boy.dir2 = 0
+
+        if space_down(e):
+            boy.is_jumping = True
+            boy.jump_start_y = boy.y
+            boy.jump_time = 0
+
 
     @staticmethod
     def exit(boy, e):
@@ -94,8 +109,17 @@ class Run:
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 6
-        boy.x += boy.dir1 * 5
-        boy.y += boy.dir2 * 5  # y축 이동
+        if not boy.is_jumping:
+            boy.x += boy.dir1 * 5
+            boy.y += boy.dir2 * 5  # y축 이동
+
+        if boy.is_jumping:
+            boy.jump_time += 0.1
+            height = 50 * math.sin(boy.jump_time)  # 포물선 운동 높이
+            boy.y = boy.jump_start_y + height
+            if boy.jump_time >= math.pi:  # 점프 완료
+                boy.is_jumping = False
+                boy.y = boy.jump_start_y  # 원래 높이로 복구
 
     @staticmethod
     def draw(boy):
@@ -116,7 +140,6 @@ class Attack:
             # 현재 이동 방향을 Idle 상태에서 유지하도록 설정
             boy.dir = boy.dir1  # dir1 값으로 Idle 상태에서 방향 설정
         else:
-            boy.dir = 0  # Idle로 처음 진입 시 정지
             boy.frame = 0
             boy.action=4
         boy.wait_time = get_time()
@@ -186,9 +209,11 @@ class Boy:
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {
-                Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, up_down: Run, up_up:Run,down_down: Run, down_up:Run,x_down:Attack, x_up:Attack},
-                Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, up_down: Idle, up_up:Idle,down_down: Idle, down_up:Idle, x_down:Attack, x_up:Attack},
-                Attack:{x_down:Idle, x_up:Idle}
+                Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, up_down: Run, up_up: Run, space_down: Run, space_up: Run,
+                       down_down: Run, down_up: Run, x_down: Attack, x_up: Attack},
+                Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, up_down: Idle, up_up: Idle, space_down: Idle, space_up: Idle,
+                      down_down: Idle, down_up: Idle, x_down: Attack, x_up: Attack,},
+                Attack: {x_down: Idle, x_up: Idle},
             }
         )
 
