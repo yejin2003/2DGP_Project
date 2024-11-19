@@ -38,11 +38,11 @@ class Idle:
     @staticmethod
     def enter(boy, e):
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
-            boy.action = 8
+            boy.action = 9
             boy.dir = boy.dir1  # dir1 값으로 Idle 상태에서 방향 설정
         else:
             boy.frame = 0
-            boy.action=8
+            boy.action=9
         boy.wait_time = get_time()
 
     @staticmethod
@@ -56,13 +56,13 @@ class Idle:
 
     @staticmethod
     def draw(boy):
-        if boy.dir == 1:  # 오른쪽
+        if boy.dir == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 62, boy.action * 69, 62, 69, 0, 'h', boy.x, boy.y, 62, 69
+                boy.frame * 62, boy.action * 68, 62, 72, 0, 'h', boy.x, boy.y, 62, 69
             )
-        else:  # 왼쪽
+        else:
             boy.image.clip_draw(
-                boy.frame * 62, boy.action * 69, 62, 69, boy.x, boy.y
+                boy.frame * 62, boy.action * 68, 62, 72, boy.x, boy.y
             )
 
 
@@ -97,39 +97,30 @@ class Run:
 
     @staticmethod
     def do(boy):
-        boy.frame = (boy.frame + 1) % 6
-        if not boy.is_jumping:
-            boy.x += boy.dir1 * 5
-            boy.y += boy.dir2 * 5  # y축 이동
+        boy.frame = (boy.frame + 1) % 4
+        boy.x += boy.dir1 * 5
+        boy.y += boy.dir2 * 5  # y축 이동
 
     @staticmethod
     def draw(boy):
         if boy.dir1 == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 62, boy.action * 69, 62, 69, 0, 'h', boy.x, boy.y, 62, 69
+                boy.frame * 62, boy.action * 68, 62, 72, 0, 'h', boy.x, boy.y, 62, 69
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 62, boy.action * 69, 62, 69, boy.x, boy.y
+                boy.frame * 62, boy.action * 68, 62, 72, boy.x, boy.y
             )
 
 class Attack:
-    # 각 프레임의 왼쪽 하단 시작 좌표와 너비 및 높이를 정의
-    sprite_frames = [
-        (0, 292, 50, 94),  # 첫 번째 프레임
-        (44, 292, 50, 94),  # 두 번째 프레임
-        (89, 292, 85, 94),  # 세 번째 프레임
-        (154, 292, 85, 94),  # 네 번째 프레임
-        (219, 292, 85, 94),  # 다섯 번째 프레임
-        (284, 292, 85, 94)  # 여섯 번째 프레임
-    ]
-
     @staticmethod
     def enter(boy, e):
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
             boy.dir = boy.dir1  # Run 상태의 방향을 유지
+            boy.action=5
         else:
             boy.frame = 0
+            boy.actiom=5
         boy.wait_time = get_time()
 
     @staticmethod
@@ -138,29 +129,23 @@ class Attack:
 
     @staticmethod
     def do(boy):
-        # 프레임 업데이트
-        boy.frame = (boy.frame + 1) % len(Attack.sprite_frames)
+        pass
 
     @staticmethod
     def draw(boy):
-        # 현재 프레임의 좌표와 크기 가져오기
-        frame = Attack.sprite_frames[boy.frame]
-        x, y, width, height = frame
-
-        if boy.dir1 == 1:  # 오른쪽 방향
+        if boy.dir == 1:  # 오른쪽
             boy.image.clip_composite_draw(
-                x, y, width, height, 0, 'h', boy.x, boy.y, width, height
+                boy.frame * 62, boy.action * 69, 62, 72, 0, 'h', boy.x, boy.y, 62, 69
             )
-        else:  # 왼쪽 방향
+        else:  # 왼쪽
             boy.image.clip_draw(
-                x, y, width, height, boy.x, boy.y
+                boy.frame * 62, boy.action * 69, 62, 72, boy.x, boy.y
             )
 
 class Jump:
     @staticmethod
     def enter(boy, e):
         if space_down(e):  # 스페이스키를 눌러서 점프 시작
-            boy.is_jumping = True
             boy.jump_velocity = 10
 
     @staticmethod
