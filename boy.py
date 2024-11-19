@@ -11,27 +11,19 @@ def space_up(e):
 def time_out(e):
      return e[0] == 'TIME_OUT'
 
-def right_down(e):
-     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
-def right_up(e):
-     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_RIGHT
-def left_down(e):
-     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LEFT
-def left_up(e):
-     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
-def up_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_UP
-def up_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_UP
-def down_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_DOWN
-def down_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
+def a_down(e):
+     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
+def a_up(e):
+     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
+def d_down(e):
+     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
+def d_up(e):
+     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_d
 
-def x_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_x
-def x_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_x
+def s_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_s
+def s_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
 
 
 class Idle:
@@ -69,25 +61,12 @@ class Idle:
 class Run:
     @staticmethod
     def enter(boy, e):
-        if right_down(e) or left_up(e):
+        if d_down(e) or a_up(e):
             boy.dir1, boy.action = 1, 9  # 오른쪽 이동
             boy.dir2=0
-        elif left_down(e) or right_up(e):
+        elif a_down(e) or d_up(e):
             boy.dir1, boy.action = -1, 9  # 왼쪽 이동
             boy.dir2 = 0
-
-        if up_down(e):
-            boy.dir2, boy.action = 1, 9  # 위 이동
-            boy.dir1 = 0
-        elif up_up(e):
-            boy.dir2 = 0
-
-        if down_down(e):  # 아래 이동 처리 추가
-            boy.dir2, boy.action = -1, 9
-            boy.dir1 = 0
-        elif down_up(e):
-            boy.dir2 = 0
-
 
     @staticmethod
     def exit(boy, e):
@@ -225,13 +204,10 @@ class Boy:
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {
-                Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, up_down: Run, up_up: Run, space_down: Jump,
-                       down_down: Run, down_up: Run, x_down: Attack, x_up: Attack},
-                Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, up_down: Idle, up_up: Idle, space_down: Jump,
-                      down_down: Idle, down_up: Idle, x_down: Attack, x_up: Attack},
-                Attack: {x_down: Idle, x_up: Idle},
-                Jump:{right_down: Run, left_down: Run, right_up: Run, left_up: Run, up_down: Run, up_up: Run, space_down: Jump,
-                      down_down: Run, down_up: Run, x_down: Attack}
+                Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run, space_down: Jump, s_down: Attack, s_up: Attack},
+                Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, s_down: Attack, s_up: Attack},
+                Attack: {s_down: Idle, s_up: Idle},
+                Jump: {d_down: Run, a_down: Run, d_up: Run, a_up: Run, space_down: Jump, s_down: Attack}
             }
         )
 
