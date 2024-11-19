@@ -70,36 +70,23 @@ class Run:
     @staticmethod
     def enter(boy, e):
         if right_down(e) or left_up(e):
-            boy.is_jumping = False
             boy.dir1, boy.action = 1, 9  # 오른쪽 이동
             boy.dir2=0
         elif left_down(e) or right_up(e):
-            boy.is_jumping = False
             boy.dir1, boy.action = -1, 9  # 왼쪽 이동
             boy.dir2 = 0
 
         if up_down(e):
-            boy.is_jumping = False
             boy.dir2, boy.action = 1, 9  # 위 이동
             boy.dir1 = 0
         elif up_up(e):
-            boy.is_jumping = False
             boy.dir2 = 0
 
         if down_down(e):  # 아래 이동 처리 추가
             boy.dir2, boy.action = -1, 9
-            boy.is_jumping = False
             boy.dir1 = 0
         elif down_up(e):
-            boy.is_jumping = False
             boy.dir2 = 0
-
-        if space_down(e):
-            boy.is_jumping = True
-            boy.jump_start_y = boy.y
-            boy.jump_time = 0
-        elif space_up(e):
-            boy.is_jumping = False
 
 
     @staticmethod
@@ -114,12 +101,6 @@ class Run:
         if not boy.is_jumping:
             boy.x += boy.dir1 * 5
             boy.y += boy.dir2 * 5  # y축 이동
-
-        if boy.is_jumping:
-            boy.y += 0.1  # 매 프레임마다 상승
-            if boy.y >= boy.jump_start_y + 100:  # 목표 높이에 도달
-                boy.y= boy.jump_start_y
-                boy.state_machine.add_event(('TIME_OUT', 0))
 
     @staticmethod
     def draw(boy):
@@ -175,6 +156,38 @@ class Attack:
                 x, y, width, height, boy.x, boy.y
             )
 
+class Jump:
+    @staticmethod
+    def enter(boy, e):
+        if space_down(e):  # 스페이스키를 눌러서 점프 시작
+            boy.is_jumping = True
+            boy.jump_velocity = 10
+
+    @staticmethod
+    def exit(boy, e):
+        pass
+
+    @staticmethod
+    def do(boy):
+        boy.y += boy.jump_velocity
+        boy.jump_velocity += boy.gravity
+
+        if boy.y <= 200 // 2:  # 점프가 끝났을 때
+            boy.is_jumping = False
+            boy.jump_velocity = 0
+            boy.y = 200 // 2
+
+    @staticmethod
+    def draw(boy):
+        if boy.dir1 == 1:
+            boy.image.clip_composite_draw(
+                boy.frame * 62, boy.action * 69, 62, 69, 0, 'h', boy.x, boy.y, 62, 69
+            )
+        else:
+            boy.image.clip_draw(
+                boy.frame * 62, boy.action * 69, 62, 69, boy.x, boy.y
+            )
+
 class StateMachine:
     def __init__(self, boy):
         self.boy = boy
@@ -211,20 +224,27 @@ class StateMachine:
 
 class Boy:
     def __init__(self):
-        self.x, self.y = 400, 90
+        self.x, self.y = 400, 70
         self.frame = 0
         self.dir = 0
         self.action = 3
+        self.jump_velocity = 10
+        self.jump_height = 10
+        self.gravity = -1
+        self.is_jumping = False
+        self.velocity_x, self.velocity_y = 30, 30
         self.image = load_image('boy.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {
-                Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, up_down: Run, up_up: Run, space_down: Run, space_up: Run,
+                Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, up_down: Run, up_up: Run, space_down: Jump,
                        down_down: Run, down_up: Run, x_down: Attack, x_up: Attack},
-                Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, up_down: Idle, up_up: Idle, space_down: Idle, space_up: Idle,
-                      down_down: Idle, down_up: Idle, x_down: Attack, x_up: Attack,},
+                Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, up_down: Idle, up_up: Idle, space_down: Jump,
+                      down_down: Idle, down_up: Idle, x_down: Attack, x_up: Attack},
                 Attack: {x_down: Idle, x_up: Idle},
+                Jump:{right_down: Run, left_down: Run, right_up: Run, left_up: Run, up_down: Run, up_up: Run, space_down: Jump,
+                      down_down: Run, down_up: Run, x_down: Attack}
             }
         )
 
