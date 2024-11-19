@@ -158,21 +158,22 @@ class Jump:
         boy.y += boy.jump_velocity
         boy.jump_velocity += boy.gravity
 
-        if boy.y <= 200 // 2:  # 점프가 끝났을 때
+        if boy.y <= 70:  # 점프가 끝났을 때
             boy.is_jumping = False
             boy.jump_velocity = 0
-            boy.y = 200 // 2
+            boy.y = 70
 
     @staticmethod
     def draw(boy):
         if boy.dir1 == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 62, boy.action * 69, 62, 69, 0, 'h', boy.x, boy.y, 62, 69
+                boy.frame * 62, boy.action * 68, 62, 72, 0, 'h', boy.x, boy.y, 62, 69
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 62, boy.action * 69, 62, 69, boy.x, boy.y
+                boy.frame * 62, boy.action * 68, 62, 72, boy.x, boy.y
             )
+
 
 class StateMachine:
     def __init__(self, boy):
