@@ -1,12 +1,10 @@
 from pico2d import *
 import math
 
-
 def space_down(e):
      return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
 def space_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_SPACE
-
 
 def time_out(e):
      return e[0] == 'TIME_OUT'
@@ -24,7 +22,6 @@ def s_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_s
 def s_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
-
 
 class Idle:
     @staticmethod
@@ -50,11 +47,11 @@ class Idle:
     def draw(boy):
         if boy.dir == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 62, boy.action * 68, 62, 72, 0, 'h', boy.x, boy.y, 62, 69
+                boy.frame * 62, boy.action * 68, 62, 72, 0, 'h', boy.x, 70, 62, 69
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 62, boy.action * 68, 62, 72, boy.x, boy.y
+                boy.frame * 62, boy.action * 68, 62, 72, boy.x, 70
             )
 
 
@@ -127,6 +124,12 @@ class Jump:
     def enter(boy, e):
         if space_down(e):  # 스페이스키를 눌러서 점프 시작
             boy.jump_velocity = 10
+            if a_down(e):# 왼쪽으로 점프
+                boy.dir = -1
+                boy.x -= 10  # 왼쪽으로 이동 거리 조정
+            if d_down(e):
+                boy.dir = 1
+                boy.x += 10
 
     @staticmethod
     def exit(boy, e):
@@ -187,7 +190,6 @@ class StateMachine:
                 self.cur_state.enter(self.boy,e)
                 return
 
-
 class Boy:
     def __init__(self):
         self.x, self.y = 400, 70
@@ -199,7 +201,7 @@ class Boy:
         self.gravity = -1
         self.is_jumping = False
         self.velocity_x, self.velocity_y = 30, 30
-        self.image = load_image('boy.png')
+        self.image = load_image('img/boy.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
@@ -207,7 +209,7 @@ class Boy:
                 Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run, space_down: Jump, s_down: Attack, s_up: Attack},
                 Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, s_down: Attack, s_up: Attack},
                 Attack: {s_down: Idle, s_up: Idle},
-                Jump: {d_down: Run, a_down: Run, d_up: Run, a_up: Run, space_down: Jump, s_down: Attack}
+                Jump: {lambda e: space_down(e) and d_down(e): Jump, lambda e: space_down(e) and a_down(e): Jump, d_up: Run, a_up: Run, space_down: Jump, s_down: Attack}
             }
         )
 

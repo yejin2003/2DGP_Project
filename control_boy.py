@@ -5,7 +5,6 @@ from grass import Grass
 
 # Game object class here
 
-
 def handle_events():
     global running
 
@@ -17,7 +16,6 @@ def handle_events():
             running = False
         else:
             boy.handle_event(event)
-
 
 def reset_world():
     global running
@@ -35,20 +33,16 @@ def reset_world():
     boy = Boy()
     world.append(boy)
 
-
-
 def update_world():
     for o in world:
         o.update()
     pass
-
 
 def render_world():
     clear_canvas()
     for o in world:
         o.draw()
     update_canvas()
-
 
 open_canvas()
 reset_world()

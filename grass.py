@@ -2,7 +2,7 @@ from pico2d import *
 
 class Grass:
     def __init__(self):
-        self.image = load_image('grass.png')  # 이미지 경로 설정
+        self.image = load_image('img/grass.png')  # 이미지 경로 설정
 
     def update(self):
         pass
