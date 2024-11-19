@@ -117,10 +117,10 @@ class Attack:
     def enter(boy, e):
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
             boy.dir = boy.dir1  # Run 상태의 방향을 유지
-            boy.action=5
+            boy.action=7
         else:
             boy.frame = 0
-            boy.actiom=5
+            boy.action=7
         boy.wait_time = get_time()
 
     @staticmethod
@@ -129,17 +129,18 @@ class Attack:
 
     @staticmethod
     def do(boy):
+        boy.frame = (boy.frame + 1) % 4
         pass
 
     @staticmethod
     def draw(boy):
         if boy.dir == 1:  # 오른쪽
             boy.image.clip_composite_draw(
-                boy.frame * 62, boy.action * 69, 62, 72, 0, 'h', boy.x, boy.y, 62, 69
+                boy.frame * 62, boy.action * 65, 63, 72, 0, 'h', boy.x, boy.y, 62, 69
             )
         else:  # 왼쪽
             boy.image.clip_draw(
-                boy.frame * 62, boy.action * 69, 62, 72, boy.x, boy.y
+                boy.frame * 62, boy.action * 65, 63, 72, boy.x, boy.y
             )
 
 class Jump:
