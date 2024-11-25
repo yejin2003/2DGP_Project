@@ -42,6 +42,7 @@ class Idle:
     def do(boy):
         if get_time() - boy.wait_time > 3:
             boy.state_machine.handle_event(('TIME_OUT', 0))
+        boy.frame = (boy.frame + 1) % 4
 
     @staticmethod
     def draw(boy):
