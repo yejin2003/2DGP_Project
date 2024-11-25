@@ -27,11 +27,11 @@ class Idle:
     @staticmethod
     def enter(boy, e):
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
-            boy.action = 9
+            boy.action = 10
             boy.dir = boy.dir1  # dir1 값으로 Idle 상태에서 방향 설정
         else:
-            boy.frame = 0
-            boy.action=9
+            boy.frame = 2
+            boy.action=10
         boy.wait_time = get_time()
 
     @staticmethod
@@ -42,17 +42,17 @@ class Idle:
     def do(boy):
         if get_time() - boy.wait_time > 3:
             boy.state_machine.handle_event(('TIME_OUT', 0))
-        boy.frame = (boy.frame + 1) % 4
+        boy.frame = 2
 
     @staticmethod
     def draw(boy):
         if boy.dir == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 62, boy.action * 68, 62, 72, 0, 'h', boy.x, 70, 62, 69
+                boy.frame * 61, boy.action * 71, 60, 78, 0, 'h', boy.x, 70, 62, 75
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 62, boy.action * 68, 62, 72, boy.x, 70
+                boy.frame * 61, boy.action * 71, 60, 78, boy.x, 70 ,62, 75
             )
 
 
@@ -86,7 +86,7 @@ class Run:
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 62, boy.action * 68, 62, 72, boy.x, boy.y
+                boy.frame * 62, boy.action * 68, 62, 72, boy.x, boy.y, 62, 69
             )
 
 class Attack:
