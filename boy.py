@@ -23,6 +23,8 @@ def s_down(e):
 def s_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
 
+
+
 class Idle:
     @staticmethod
     def enter(boy, e):
@@ -123,14 +125,9 @@ class Attack:
 class Jump:
     @staticmethod
     def enter(boy, e):
-        if space_down(e):  # 스페이스키를 눌러서 점프 시작
+        if space_down(e):# 스페이스키를 눌러서 점프 시작
+            boy.action=9
             boy.jump_velocity = 10
-            if a_down(e):# 왼쪽으로 점프
-                boy.dir = -1
-                boy.x -= 10  # 왼쪽으로 이동 거리 조정
-            if d_down(e):
-                boy.dir = 1
-                boy.x += 10
 
     @staticmethod
     def exit(boy, e):
@@ -154,7 +151,7 @@ class Jump:
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 62, boy.action * 68, 62, 72, boy.x, boy.y
+                boy.frame * 62, boy.action * 68, 62, 72, boy.x, boy.y, 62, 69
             )
 
 
@@ -208,9 +205,9 @@ class Boy:
         self.state_machine.set_transitions(
             {
                 Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run, space_down: Jump, s_down: Attack, s_up: Attack},
-                Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, s_down: Attack, s_up: Attack},
+                Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, space_up: Jump, s_down: Attack, s_up: Attack},
                 Attack: {s_down: Idle, s_up: Idle},
-                Jump: {lambda e: space_down(e) and d_down(e): Jump, lambda e: space_down(e) and a_down(e): Jump, d_up: Run, a_up: Run, space_down: Jump, s_down: Attack}
+                Jump: {space_down: Jump, d_down: Run, a_down:Run, a_up:Idle, d_up:Idle}
             }
         )
 
