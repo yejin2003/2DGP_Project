@@ -25,6 +25,8 @@ def init():
     server.boy = Boy()
     game_world.add_object(server.boy, 1)
 
+    game_world.add_collision_pair('grass:hero', server.boy, None)
+
 def update():
     game_world.update()
 

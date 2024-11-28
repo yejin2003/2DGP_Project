@@ -87,6 +87,12 @@ class Attack:
         else:
             boy.frame = 0
             boy.action=7
+        if isinstance(boy.state_machine.cur_state, Jump):  # Run 상태에서 전환된 경우
+            boy.dir = boy.dir1  # Run 상태의 방향을 유지
+            boy.action=7
+        else:
+            boy.frame = 0
+            boy.action=7
         boy.wait_time = get_time()
 
     @staticmethod
@@ -124,6 +130,7 @@ class Jump:
 
     @staticmethod
     def exit(boy, e):
+        boy.dir = boy.dir1
         pass
 
     @staticmethod
@@ -134,7 +141,7 @@ class Jump:
 
         if boy.y <= server.grass.y + 40:  # 점프가 끝났을 때
             boy.is_jumping = False
-            boy.is_moving= False
+            boy.on_ground= True
             boy.jump_velocity = 0
             boy.y = server.grass.y + 40
             boy.dir=0 #정지 상태로 만들어주기
@@ -196,6 +203,7 @@ class Boy:
         self.gravity = -1
         self.is_jumping = False
         self.is_moving= True
+        self.on_ground= False
         self.velocity_x, self.velocity_y = 30, 30
         self.image = load_image('img/boy.png')
         self.state_machine = StateMachine(self)
@@ -205,7 +213,7 @@ class Boy:
                 Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run, space_down: Jump, s_down: Attack, s_up: Attack},
                 Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, space_up: Jump, s_down: Attack, s_up: Attack},
                 Attack: {s_down: Idle, s_up: Idle},
-                Jump: {space_down: Jump, d_down: Run, a_down:Run, a_up:Idle, d_up:Idle}
+                Jump: {space_down: Jump, d_down: Run, a_down:Run, a_up:Idle, d_up:Idle, s_down:Attack}
             }
         )
 
@@ -220,3 +228,13 @@ class Boy:
 
     def draw(self):
         self.state_machine.draw()
+
+    def get_bb(self):
+        # fill here
+        return self.x - 30, self.y - 40, self.x + 30, self.y + 30
+        pass
+
+    def handle_collision(self, group, other):
+        if group == 'grass:boy':
+            self.is_jumping = False
+            self.on_ground = True
