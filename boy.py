@@ -3,29 +3,7 @@ import math
 
 import game_framework
 
-
-
-def space_down(e):
-     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
-def space_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_SPACE
-
-def time_out(e):
-     return e[0] == 'TIME_OUT'
-
-def a_down(e):
-     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
-def a_up(e):
-     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
-def d_down(e):
-     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
-def d_up(e):
-     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_d
-
-def s_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_s
-def s_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
+from statemachine import *
 
 PIXEL_PER_METER = (10.0 / 0.2)  # 10 pixel 20 cm
 RUN_SPEED_KMPH = 20  # Km / Hour
@@ -69,6 +47,7 @@ class Idle:
 class Run:
     @staticmethod
     def enter(boy, e):
+        boy.is_moving=True
         if d_down(e) or a_up(e):
             boy.dir1, boy.action = 1, 9  # 오른쪽 이동
             boy.dir2=0
@@ -78,6 +57,7 @@ class Run:
 
     @staticmethod
     def exit(boy, e):
+        boy.is_moving = False
         boy.dir = boy.dir1
         pass
 
@@ -153,8 +133,11 @@ class Jump:
 
         if boy.y <= 70:  # 점프가 끝났을 때
             boy.is_jumping = False
+            boy.is_moving= False
             boy.jump_velocity = 0
             boy.y = 70
+            boy.dir=0
+
 
     @staticmethod
     def draw(boy):
@@ -211,6 +194,7 @@ class Boy:
         self.jump_height = 10
         self.gravity = -1
         self.is_jumping = False
+        self.is_moving= True
         self.velocity_x, self.velocity_y = 30, 30
         self.image = load_image('img/boy.png')
         self.state_machine = StateMachine(self)
@@ -229,6 +213,9 @@ class Boy:
 
     def handle_event(self, event):
         self.state_machine.handle_event(('INPUT', event))
+        if event.type == 'LAND':  # 점프가 끝난 경우
+            self.cur_state = Idle
+            self.cur_state.enter(self.boy, event)
 
     def draw(self):
         self.state_machine.draw()
