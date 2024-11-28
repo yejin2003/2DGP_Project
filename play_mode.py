@@ -4,6 +4,7 @@ import game_framework
 import game_world
 from grass import Grass
 from boy import Boy
+import server
 
 def handle_events():
     events = get_events()
@@ -11,20 +12,18 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         else:
-            boy.handle_event(event)
+            server.boy.handle_event(event)
 
 
 def init():
     global running
-    global boy
-
     running = True
 
-    grass = Grass()
-    game_world.add_object(grass, 0)
+    server.grass = Grass()
+    game_world.add_object(server.grass, 0)
 
-    boy = Boy()
-    game_world.add_object(boy, 1)
+    server.boy = Boy()
+    game_world.add_object(server.boy, 1)
 
 def update():
     game_world.update()

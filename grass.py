@@ -1,8 +1,10 @@
 from pico2d import *
+import server
 
 class Grass:
     def __init__(self):
         self.image = load_image('img/grass.png')  # 이미지 경로 설정
+        self.y=30
 
     def update(self):
         pass
@@ -13,7 +15,7 @@ class Grass:
 
         # 화면 너비를 채울 때까지 타일을 그립니다.
         for x in range(0, screen_width, tile_width):
-            self.image.clip_draw(107, 30, 107, 30, x, 30, 300, 60)
+            self.image.clip_draw(107, 30, 107, 30, x, self.y, 300, 60)
 
 
 

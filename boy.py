@@ -2,8 +2,9 @@ from pico2d import *
 import math
 
 import game_framework
-
+import grass
 from statemachine import *
+import server
 
 PIXEL_PER_METER = (10.0 / 0.2)  # 10 pixel 20 cm
 RUN_SPEED_KMPH = 20  # Km / Hour
@@ -131,12 +132,12 @@ class Jump:
         boy.y += boy.jump_velocity
         boy.jump_velocity += boy.gravity
 
-        if boy.y <= 70:  # 점프가 끝났을 때
+        if boy.y <= server.grass.y + 40:  # 점프가 끝났을 때
             boy.is_jumping = False
             boy.is_moving= False
             boy.jump_velocity = 0
-            boy.y = 70
-            boy.dir=0
+            boy.y = server.grass.y + 40
+            boy.dir=0 #정지 상태로 만들어주기
 
 
     @staticmethod
