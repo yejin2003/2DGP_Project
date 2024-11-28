@@ -2,7 +2,7 @@ from pico2d import *
 
 import game_framework
 import game_world
-from grass import Grass
+from grass import Grass, Grass2
 from boy import Boy
 import server
 
@@ -21,6 +21,9 @@ def init():
 
     server.grass = Grass()
     game_world.add_object(server.grass, 0)
+
+    server.grass2= Grass2()
+    game_world.add_object(server.grass2, 0)
 
     server.boy = Boy()
     game_world.add_object(server.boy, 1)

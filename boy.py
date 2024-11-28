@@ -139,11 +139,11 @@ class Jump:
         boy.y += boy.jump_velocity
         boy.jump_velocity += boy.gravity
 
-        if boy.y <= server.grass.y + 40:  # 점프가 끝났을 때
+        if boy.y <= server.grass.gy + 40:  # 점프가 끝났을 때
             boy.is_jumping = False
             boy.on_ground= True
             boy.jump_velocity = 0
-            boy.y = server.grass.y + 40
+            boy.y = server.grass.gy + 40
             boy.dir=0 #정지 상태로 만들어주기
 
 
