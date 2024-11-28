@@ -1,6 +1,10 @@
 from pico2d import *
 import math
 
+import game_framework
+
+
+
 def space_down(e):
      return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
 def space_up(e):
@@ -23,7 +27,11 @@ def s_down(e):
 def s_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
 
-
+PIXEL_PER_METER = (10.0 / 0.2)  # 10 pixel 20 cm
+RUN_SPEED_KMPH = 20  # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 class Idle:
     @staticmethod
@@ -70,15 +78,13 @@ class Run:
 
     @staticmethod
     def exit(boy, e):
-        if boy.dir1 != 0:
-            boy.dir = boy.dir1
+        boy.dir = boy.dir1
         pass
 
     @staticmethod
     def do(boy):
         boy.frame = (boy.frame + 1) % 4
-        boy.x += boy.dir1 * 5
-        boy.y += boy.dir2 * 5  # y축 이동
+        boy.x += boy.dir1 * RUN_SPEED_PPS * game_framework.frame_time
 
     @staticmethod
     def draw(boy):
@@ -125,9 +131,15 @@ class Attack:
 class Jump:
     @staticmethod
     def enter(boy, e):
+        boy.jump_velocity = 10
+        boy.is_jumping=True
         if space_down(e):# 스페이스키를 눌러서 점프 시작
             boy.action=9
             boy.jump_velocity = 10
+        if d_down(e):
+            boy.dir=-1
+        if a_down(e):
+            boy.dir=1
 
     @staticmethod
     def exit(boy, e):
@@ -135,6 +147,7 @@ class Jump:
 
     @staticmethod
     def do(boy):
+        boy.x+=boy.dir*RUN_SPEED_PPS*game_framework.frame_time
         boy.y += boy.jump_velocity
         boy.jump_velocity += boy.gravity
 
