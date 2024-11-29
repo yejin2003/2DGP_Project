@@ -5,6 +5,7 @@ import game_world
 from grass import Grass, Grass2
 from boy import Boy
 import server
+from snake import Snake
 
 def handle_events():
     events = get_events()
@@ -18,6 +19,7 @@ def handle_events():
 def init():
     global running
     running = True
+    global snake
 
     server.grass = Grass()
     game_world.add_object(server.grass, 0)
@@ -27,6 +29,9 @@ def init():
 
     server.boy = Boy()
     game_world.add_object(server.boy, 1)
+
+    snake=Snake()
+    game_world.add_object(snake, 1)
 
     game_world.add_collision_pair('grass:hero', server.boy, None)
 

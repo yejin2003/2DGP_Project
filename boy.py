@@ -37,11 +37,11 @@ class Idle:
     def draw(boy):
         if boy.dir == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 61, boy.action * 71, 60, 78, 0, 'h', boy.x, 70, 62, 75
+                boy.frame * 61, boy.action * 71, 60, 78, 0, 'h', boy.x, boy.y, 62, 75
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 61, boy.action * 71, 60, 78, boy.x, 70 ,62, 75
+                boy.frame * 61, boy.action * 71, 60, 78, boy.x, boy.y ,62, 75
             )
 
 
@@ -138,12 +138,13 @@ class Jump:
         boy.x+=boy.dir*RUN_SPEED_PPS*game_framework.frame_time
         boy.y += boy.jump_velocity
         boy.jump_velocity += boy.gravity
+        print(boy.y)
 
-        if boy.y <= server.grass.gy + 40:  # 점프가 끝났을 때
+        if boy.y <= server.grass2.gy + 40:  # 점프가 끝났을 때
             boy.is_jumping = False
             boy.on_ground= True
             boy.jump_velocity = 0
-            boy.y = server.grass.gy + 40
+            boy.y = server.grass2.gy + 40
             boy.dir=0 #정지 상태로 만들어주기
 
 
@@ -194,7 +195,7 @@ class StateMachine:
 
 class Boy:
     def __init__(self):
-        self.x, self.y = 400, 70
+        self.x, self.y = 400, server.grass2.gy+40
         self.frame = 0
         self.dir = 0
         self.action = 3
@@ -204,7 +205,6 @@ class Boy:
         self.is_jumping = False
         self.is_moving= True
         self.on_ground= False
-        self.velocity_x, self.velocity_y = 30, 30
         self.image = load_image('img/boy.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
