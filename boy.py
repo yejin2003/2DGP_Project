@@ -196,6 +196,8 @@ class StateMachine:
 class Boy:
     def __init__(self):
         self.x, self.y = 400, server.grass2.gy+30
+        self.max = 800 - 10
+        self.min = 10
         self.frame = 0
         self.dir = 0
         self.action = 3
@@ -220,6 +222,12 @@ class Boy:
 
     def update(self):
         self.state_machine.update()
+        if self.x <= self.min:  # 최소 경계
+            self.x = self.min
+            self.dir = 1  # 오른쪽으로 방향 전환
+        elif self.x >= self.max:  # 최대 경계
+            self.x = self.max
+            self.dir = -1
 
     def handle_event(self, event):
         self.state_machine.handle_event(('INPUT', event))
