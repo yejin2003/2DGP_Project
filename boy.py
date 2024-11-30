@@ -195,10 +195,11 @@ class StateMachine:
 
 class Boy:
     def __init__(self):
-        self.x, self.y = 400, server.grass2.gy+40
+        self.x, self.y = 400, server.grass2.gy+30
         self.frame = 0
         self.dir = 0
         self.action = 3
+        self.life=3
         self.jump_velocity = 10
         self.jump_height = 10
         self.gravity = -1
@@ -227,14 +228,23 @@ class Boy:
             self.cur_state.enter(self.boy, event)
 
     def draw(self):
+        draw_rectangle(*self.get_bb())
         self.state_machine.draw()
 
     def get_bb(self):
         # fill here
-        return self.x - 30, self.y - 40, self.x + 30, self.y + 30
+        return self.x - 30, self.y - 40, self.x + 30, self.y + 40
         pass
 
     def handle_collision(self, group, other):
         if group == 'grass:boy':
             self.is_jumping = False
             self.on_ground = True
+
+        if group=='boy:snake':
+            if self.life >0:
+                self.life-=1
+
+            elif self.life<=0:
+                #죽는다
+                pass

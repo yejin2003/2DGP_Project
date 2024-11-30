@@ -16,8 +16,8 @@ class Snake:
         self.x, self.y= x,y
         self.frame = 0
         self.action = 4
-        self.speed=2
-        self.range=20
+        self.speed= -0.5
+        self.range=28
         self.dir = 1
         self.action = 3
         self.on_ground= False
@@ -31,16 +31,17 @@ class Snake:
                 (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3)
         # x 좌표 자동 이동
         self.x += self.speed * self.dir
-        # 경계 확인 및 방향 전환
-        if self.x <= self.min:  # 최소 경계
-            self.x = self.min
-            self.dir = 1  # 오른쪽으로 방향 전환
-        elif self.x >= self.max:  # 최대 경계
-            self.x = self.max
-            self.dir = -1
+        # # 경계 확인 및 방향 전환
+        # if self.x <= self.min:  # 최소 경계
+        #     self.x = self.min
+        #     self.dir = 1  # 오른쪽으로 방향 전환
+        # elif self.x >= self.max:  # 최대 경계
+        #     self.x = self.max
+        #     self.dir = -1
         pass
 
     def draw(self):
+        draw_rectangle(*self.get_bb())
         if self.dir == 1:
             self.image.clip_draw(int(self.frame) , self.action * 32 ,
                                  32 , 32 , self.x, self.y, 34, 33)

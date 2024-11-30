@@ -31,7 +31,7 @@ def init():
     game_world.add_object(server.boy, 1)
 
     global snakes
-    snakes = [Snake(random.randint(500, 800-10), server.grass2.gy+40) for _ in range(1)]
+    snakes = [Snake(random.randint(500, 800-10), server.grass2.gy+20) for _ in range(5)]
     for snake in snakes:
         game_world.add_object(snake,1)
 
