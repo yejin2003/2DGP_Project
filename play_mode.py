@@ -1,11 +1,12 @@
 from pico2d import *
 
+import random
 import game_framework
 import game_world
 from grass import Grass, Grass2
 from boy import Boy
 import server
-from snake import Snake
+from snake import *
 
 def handle_events():
     events = get_events()
@@ -19,7 +20,6 @@ def handle_events():
 def init():
     global running
     running = True
-    global snake
 
     server.grass = Grass()
     game_world.add_object(server.grass, 0)
@@ -30,13 +30,17 @@ def init():
     server.boy = Boy()
     game_world.add_object(server.boy, 1)
 
-    snake=Snake()
-    game_world.add_object(snake, 1)
+    global snakes
+    snakes = [Snake(random.randint(500, 800-10), server.grass2.gy+40) for _ in range(1)]
+    for snake in snakes:
+        game_world.add_object(snake,1)
 
     game_world.add_collision_pair('grass:hero', server.boy, None)
 
 def update():
     game_world.update()
+    #handle_collisions()
+    delay(0.01)
 
 def draw():
     clear_canvas()

@@ -11,14 +11,14 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 11
 
 class Snake:
-    def __init__(self):
+    def __init__(self,x,y):
         import server
-        self.x, self.y = 400, server.grass2.gy+40
+        self.x, self.y= x,y
         self.frame = 0
         self.action = 4
-        self.speed=5
+        self.speed=2
         self.range=20
-        self.dir = 0
+        self.dir = 1
         self.action = 3
         self.on_ground= False
         self.image = load_image('img/snake_monster.png')
@@ -42,11 +42,11 @@ class Snake:
 
     def draw(self):
         if self.dir == 1:
-            self.image.clip_draw(int(self.frame) * 34 , self.action * 33 ,
-                                 34 , 33 , self.x, self.y, 80, 80)
+            self.image.clip_draw(int(self.frame) , self.action * 32 ,
+                                 32 , 32 , self.x, self.y, 34, 33)
         elif self.dir == -1:
-            self.image.clip_composite_draw(int(self.frame) * 34, self.action * 33,
-                                 34, 33, 0, 'h', self.x, self.y, 80, 80)
+            self.image.clip_composite_draw(int(self.frame), self.action * 32,
+                                 32, 32, 0, 'h', self.x, self.y, 34, 33)
         pass
 
     def get_bb(self):
@@ -54,5 +54,4 @@ class Snake:
         pass
 
     def handle_collision(self, group, other):
-        if group == 'boy:snake':
             pass

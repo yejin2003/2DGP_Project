@@ -1,3 +1,6 @@
+import boy
+from snake import Snake
+
 world = [[] for _ in range(4)]
 collision_pairs={} # 빈 딕셔너리
 
