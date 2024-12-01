@@ -1,5 +1,7 @@
 from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDL_KEYUP, SDLK_a, SDLK_d, SDLK_s
 
+def start_event(e):
+    return e[0] == 'START'
 
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
@@ -36,44 +38,42 @@ def s_down(e):
 def s_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
 
+def attacked(e):
+    return e[0] == 'CHANGE'
+
 class StateMachine:
     def __init__(self, o):
         self.o = o
         self.event_que = []
-        self.active_states = set()
+
+    def start(self, state):
+        self.cur_state = state
+
+        #print(f'Enter into {state}')
+        self.cur_state.enter(self.o, ('START', 0))
 
     def add_event(self, e):
+        # print(f'    DEBUG: New event {e} added to event Que')
         self.event_que.append(e)
 
     def set_transitions(self, transitions):
         self.transitions = transitions
 
     def update(self):
-        for state in self.active_states:
-            state.do(self.o)
-
+        self.cur_state.do(self.o)
         if self.event_que:
+            event = self.event_que.pop(0)
+            self.handle_event(event)
 
-            for state in list(self.active_states):
-                e = self.event_que.pop(0)
-                for check_event, next_state in self.transitions[state].items():
-                    if check_event(e):
-                        state.exit(self.o, e)
-                        print(f'    exit from{state}')
-                        self.active_states.discard(state)
+    def draw(self):
+        self.cur_state.draw(self.o)
 
-                        self.active_states.add(next_state)
-                        next_state.enter(self.o, e)
-                        print(f'    enter into {next_state}')
-                        break
-
-
-    def start(self, start_states):
-        for state in start_states:
-            self.active_states.add(state)
-            state.enter(self.o, ('START', 0))  # 더미 이벤트
-            print(f'    enter into {state}')
-
-    def draw(self, o):
-        for state in self.active_states:
-            state.draw(self.o)
+    def handle_event(self, e):
+        for event, next_state in self.transitions[self.cur_state].items():
+            if event(e):
+                #print(f'Exit from {self.cur_state}')
+                self.cur_state.exit(self.o, e)
+                self.cur_state = next_state
+                #print(f'Enter into {self.cur_state}')
+                self.cur_state.enter(self.o, e)
+                return

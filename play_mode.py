@@ -36,10 +36,13 @@ def init():
 
     global snakes
     snakes = [Snake(random.randint(500, 800-10), server.grass2.gy+20) for _ in range(5)]
-    for snake in snakes:
-        game_world.add_object(snake,2)
+    game_world.add_objects(snakes,2)
 
-    game_world.add_collision_pair('grass:hero', server.boy, None)
+    game_world.add_collision_pair('grass:boy', server.boy, None)
+    game_world.add_collision_pair('boy:snake', server.boy, None)
+
+    for snake in snakes:
+        game_world.add_collision_pair('snake:boy', snake, None)
 
 def update():
     game_world.update()

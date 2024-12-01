@@ -55,4 +55,8 @@ class Snake:
         pass
 
     def handle_collision(self, group, other):
+        if group == 'snake:boy':
+            other.is_attacked=True
+            other.life-=1
+            other.state_machine.add_event(('CHANGE', 0))
             pass

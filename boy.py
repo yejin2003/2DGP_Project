@@ -3,7 +3,7 @@ import math
 
 import game_framework
 import grass
-from statemachine import *
+from statemachine import start_event, a_down, a_up, d_down, d_up, s_down, s_up, space_down, space_up, StateMachine, time_out, attacked
 import server
 
 PIXEL_PER_METER = (10.0 / 0.2)  # 10 pixel 20 cm
@@ -120,7 +120,7 @@ class Jump:
     def enter(boy, e):
         boy.jump_velocity = 10
         boy.is_jumping=True
-        if space_down(e):# 스페이스키를 눌러서 점프 시작
+        if space_down(e): #스페이스키를 눌러서 점프 시작
             boy.action=9
             boy.jump_velocity = 10
         if d_down(e):
@@ -159,39 +159,44 @@ class Jump:
                 boy.frame * 62, boy.action * 68, 62, 72, boy.x, boy.y, 62, 69
             )
 
-
-class StateMachine:
-    def __init__(self, boy):
-        self.boy = boy
-        self.event_que = []
-
-    def start(self,state):
-        self.cur_state=state
-        self.cur_state.enter(self.boy, ('START', 0))
+class Attacked:
+    @staticmethod
+    def enter(boy, e):
+        boy.is_attacked=True
+        if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
+            boy.dir = boy.dir1  # Run 상태의 방향을 유지
+            boy.action=2
+        if isinstance(boy.state_machine.cur_state, Idle):  # Idle 상태에서 전환된 경우
+            boy.dir = boy.dir1  # Run 상태의 방향을 유지
+            boy.action=2
+        if isinstance(boy.state_machine.cur_state, Attack):  # Idle 상태에서 전환된 경우
+            boy.dir = boy.dir1  # Run 상태의 방향을 유지
+            boy.action = 2
         pass
 
-    def add_event(self, e):
-        self.event_que.append(e)
+    @staticmethod
+    def exit(boy, e):
+        pass
 
-    def set_transitions(self,transitions):
-        self.transitions = transitions
 
-    def update(self):
-        self.cur_state.do(self.boy)
-        if self.event_que:
-            event=self.event_que.pop(0)
-            self.handle_event(event)
+    @staticmethod
+    def do(boy):
+        boy.x-=boy.dir1*0.5
+        boy.frame = (boy.frame + 1) % 5
+        pass
 
-    def draw(self):
-        self.cur_state.draw(self.boy)
 
-    def handle_event(self, e):
-        for check_event, next_state in self.transitions[self.cur_state].items():
-            if check_event(e):
-                self.cur_state.exit(self.boy,e)
-                self.cur_state = next_state
-                self.cur_state.enter(self.boy,e)
-                return
+    @staticmethod
+    def draw(boy):
+        if boy.dir1 == 1:
+            boy.image.clip_composite_draw(
+                boy.frame * 62, boy.action * 68, 62, 72, 0, 'h', boy.x, boy.y, 62, 69
+            )
+        else:
+            boy.image.clip_draw(
+                boy.frame * 62, boy.action * 68, 62, 72, boy.x, boy.y, 62, 69
+            )
+        pass
 
 class Boy:
     def __init__(self):
@@ -208,15 +213,17 @@ class Boy:
         self.is_jumping = False
         self.is_moving= True
         self.on_ground= False
+        self.is_dead= False
+        self.is_attacked=False
         self.image = load_image('img/boy.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {
-                Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run, space_down: Jump, s_down: Attack, s_up: Attack},
-                Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, space_up: Jump, s_down: Attack, s_up: Attack},
-                Attack: {s_down: Idle, s_up: Idle},
-                Jump: {space_down: Jump, d_down: Run, a_down:Run, a_up:Idle, d_up:Idle, s_down:Attack}
+                Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run, space_down: Jump, s_down: Attack, s_up: Attack, attacked:Attacked},
+                Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, space_up: Jump, s_down: Attack, s_up: Attack, attacked: Attacked},
+                Attack: {s_down: Idle, s_up: Idle, attacked: Attacked},
+                Jump: {space_down: Jump, d_down: Run, a_down:Run, a_up:Idle, d_up:Idle, s_down:Attack, attacked: Attacked}
             }
         )
 
@@ -250,9 +257,11 @@ class Boy:
             self.on_ground = True
 
         if group=='boy:snake':
+            print(self.life)
             if self.life >0:
                 self.life-=1
-
-            elif self.life<=0:
-                #죽는다
+                self.state_machine.add_event(('CHANGE', 0))
+            elif self.life==0:
+                game_framework.quit()
                 pass
+
