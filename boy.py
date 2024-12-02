@@ -162,7 +162,6 @@ class Jump:
 class Attacked:
     @staticmethod
     def enter(boy, e):
-        boy.is_attacked=True
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
             boy.dir = boy.dir1  # Run 상태의 방향을 유지
             boy.action=2
@@ -214,7 +213,6 @@ class Boy:
         self.is_moving= True
         self.on_ground= False
         self.is_dead= False
-        self.is_attacked=False
         self.image = load_image('img/boy.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
