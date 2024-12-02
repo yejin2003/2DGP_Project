@@ -2,6 +2,7 @@ from pico2d import *
 import math
 
 import game_framework
+import game_world
 import grass
 from statemachine import start_event, a_down, a_up, d_down, d_up, s_down, s_up, space_down, space_up, StateMachine, time_out, attacked
 import server
@@ -254,12 +255,5 @@ class Boy:
             self.is_jumping = False
             self.on_ground = True
 
-        if group=='boy:snake':
-            print(self.life)
-            if self.life >0:
-                self.life-=1
-                self.state_machine.add_event(('CHANGE', 0))
-            elif self.life==0:
-                game_framework.quit()
-                pass
-
+        if group=='snake:boy':
+            print("충돌")

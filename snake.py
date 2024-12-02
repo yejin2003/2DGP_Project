@@ -15,7 +15,7 @@ class Snake:
         import server
         self.x, self.y= x,y
         self.frame = 0
-        self.action = 4
+        self.action = 5
         self.speed= 0.5
         self.range=28
         self.dir = -1
@@ -27,8 +27,7 @@ class Snake:
 
     def update(self):
 
-        self.frame = (
-                (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3)
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         # x 좌표 자동 이동
         self.x += self.speed * self.dir
         # 경계 확인 및 방향 전환
@@ -56,6 +55,5 @@ class Snake:
 
     def handle_collision(self, group, other):
         if group == 'snake:boy':
-            other.life-=1
-            other.state_machine.add_event(('CHANGE', 0))
+            other.state_machine.add_event(('ATTACKED', 0))
             pass

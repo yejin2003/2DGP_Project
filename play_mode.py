@@ -39,7 +39,6 @@ def init():
     game_world.add_objects(snakes,2)
 
     game_world.add_collision_pair('grass:boy', server.boy, None)
-    game_world.add_collision_pair('boy:snake', server.boy, None)
 
     for snake in snakes:
         game_world.add_collision_pair('snake:boy', snake, None)
