@@ -15,7 +15,7 @@ class Snake:
         import server
         self.x, self.y= x,y
         self.frame = 0
-        self.action = 5
+        self.action = 4
         self.speed= 0.5
         self.range=28
         self.dir = -1
@@ -55,5 +55,6 @@ class Snake:
 
     def handle_collision(self, group, other):
         if group == 'snake:boy':
+            print("충돌")
             other.state_machine.add_event(('ATTACKED', 0))
             pass

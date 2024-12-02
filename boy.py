@@ -257,3 +257,4 @@ class Boy:
 
         if group=='snake:boy':
             print("충돌")
+            self.state_machine.add_event(('ATTACKED', 0))
