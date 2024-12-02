@@ -82,6 +82,7 @@ class Run:
 class Attack:
     @staticmethod
     def enter(boy, e):
+        boy.is_Attack=True
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
             boy.dir = boy.dir1  # Run 상태의 방향을 유지
             boy.action=7
@@ -139,7 +140,6 @@ class Jump:
         boy.x+=boy.dir*RUN_SPEED_PPS*game_framework.frame_time
         boy.y += boy.jump_velocity
         boy.jump_velocity += boy.gravity
-        print(boy.y)
 
         if boy.y <= server.grass2.gy + 40:  # 점프가 끝났을 때
             boy.is_jumping = False
@@ -206,14 +206,14 @@ class Boy:
         self.frame = 0
         self.dir = 0
         self.action = 3
-        self.life=3
+        self.hp=3
         self.jump_velocity = 10
         self.jump_height = 10
         self.gravity = -1
         self.is_jumping = False
         self.is_moving= True
         self.on_ground= False
-        self.is_dead= False
+        self.is_Attack=False
         self.image = load_image('img/boy.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
@@ -222,7 +222,8 @@ class Boy:
                 Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run, space_down: Jump, s_down: Attack, s_up: Attack, attacked:Attacked},
                 Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, space_up: Jump, s_down: Attack, s_up: Attack, attacked: Attacked},
                 Attack: {s_down: Idle, s_up: Idle, attacked: Attacked},
-                Jump: {space_down: Jump, d_down: Run, a_down:Run, a_up:Idle, d_up:Idle, s_down:Attack, attacked: Attacked}
+                Jump: {space_down: Jump, d_down: Run, a_down:Run, a_up:Idle, d_up:Idle, s_down:Attack, attacked: Attacked},
+                Attacked: {time_out:Idle}
             }
         )
 
@@ -256,5 +257,10 @@ class Boy:
             self.on_ground = True
 
         if group=='snake:boy':
+            self.hp-=1
             print("충돌")
             self.state_machine.add_event(('ATTACKED', 0))
+
+            if self.is_Attack:
+                game_world.remove_object(other)
+                pass

@@ -57,4 +57,7 @@ class Snake:
         if group == 'snake:boy':
             print("충돌")
             other.state_machine.add_event(('ATTACKED', 0))
+            if other.is_Attack:
+                game_world.remove_object(self)
+                pass
             pass
