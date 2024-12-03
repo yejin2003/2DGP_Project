@@ -16,7 +16,7 @@ class Snake:
         self.x, self.y= x,y
         self.frame = 0
         self.action = 4
-        self.speed= random.uniform(0.1,0.5)
+        self.speed= random.uniform(0.5,0.8)
         self.size=2
         self.range=28
         self.dir = -1
@@ -55,14 +55,7 @@ class Snake:
         pass
 
     def shrink(self):
-        if self.size==2:
-            self.size=1.5
-        elif self.size==1.5:
-             self.size=1
-        elif self.size==1:
-            self.size=0.5
-        elif self.size==0.5:
-            game_world.remove_object(self)
+        game_world.remove_object(self)
 
     def handle_collision(self, group, other):
         if group == 'snake:boy':

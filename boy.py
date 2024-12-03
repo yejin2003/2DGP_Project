@@ -137,19 +137,20 @@ class Jump:
     @staticmethod
     def exit(boy, e):
         boy.dir = boy.dir1
+        boy.cur_state = Idle
         pass
 
     @staticmethod
     def do(boy):
-        boy.x+=boy.dir*RUN_SPEED_PPS*game_framework.frame_time
+        boy.x +=boy.dir*RUN_SPEED_PPS*game_framework.frame_time
         boy.y += boy.jump_velocity
         boy.jump_velocity += boy.gravity
 
-        if boy.y <= server.grass2.gy+30:  # 점프가 끝났을 때
+        if boy.y <= 90:  # 점프가 끝났을 때
             boy.is_jumping = False
             boy.on_ground= True
             boy.jump_velocity = 0
-            boy.y = server.grass2.gy+30
+            boy.y = 90
             boy.dir=0 #정지 상태로 만들어주기
 
 
@@ -230,7 +231,7 @@ class Boy:
                 Idle: {d_down: Run, a_down: Run, a_up: Idle, d_up: Idle, space_down: Jump, s_down: Attack, s_up: Attack, attacked:Attacked},
                 Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, space_up: Jump, s_down: Attack, s_up: Attack, attacked: Attacked},
                 Attack: {s_down: Idle, s_up: Idle},
-                Jump: {space_down: Jump, space_up: Jump, d_down: Idle, a_down:Idle, a_up:Idle, d_up:Idle, s_down:Attack, attacked: Attacked},
+                Jump: {space_down: Jump, space_up: Jump, d_down: Jump, a_down:Jump, a_up:Idle, d_up:Idle, s_down:Attack, attacked: Attacked},
                 Attacked: {d_down: Run, a_down:Run, a_up: Idle, d_up:Idle, s_down:Attack, s_up: Idle, space_down:Jump, space_up:Jump}
             }
         )

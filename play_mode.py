@@ -37,7 +37,7 @@ def init():
 
     global snakes
 
-    snakes = [Snake(random.randint(500, 800-10), server.grass2.gy+20) for _ in range(5)]
+    snakes = [Snake(random.randint(600, 800-10), server.grass2.gy+20) for _ in range(5)]
     game_world.add_objects(snakes,2)
 
     game_world.add_collision_pair('grass:boy', server.boy, None)
@@ -47,7 +47,7 @@ def init():
     game_world.add_collision_pair('snake:boy', None, server.boy)
 
     global snailes
-    snailes= [Snail(random.randint(10, 300), server.grass2.gy+20) for _ in range(5)]
+    snailes= [Snail(random.randint(10, 200), server.grass2.gy+20) for _ in range(5)]
     game_world.add_objects(snailes,2)
 
     for snail in snailes:
