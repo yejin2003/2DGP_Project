@@ -17,6 +17,7 @@ class Snake:
         self.frame = 0
         self.action = 4
         self.speed= 0.5
+        self.size=2
         self.range=28
         self.dir = -1
         self.action = 3
@@ -43,21 +44,23 @@ class Snake:
         draw_rectangle(*self.get_bb())
         if self.dir == -1:
             self.image.clip_draw(int(self.frame) , self.action * 32 ,
-                                 32 , 32 , self.x, self.y, 34, 33)
+                                 32 , 32 , self.x, self.y, self.size * 17, self.size*17)
         elif self.dir == 1:
             self.image.clip_composite_draw(int(self.frame), self.action * 32,
-                                 32, 32, 0, 'h', self.x, self.y, 34, 33)
+                                 32, 32, 0, 'h', self.x, self.y, self.size*17, self.size*17)
         pass
 
     def get_bb(self):
         return self.x - 20, self.y - 20, self.x + 20, self.y + 20
         pass
 
+    def shrink(self):
+        if self.size==2:
+            self.size=1
+        elif self.size==1:
+            game_world.remove_object(self)
+
     def handle_collision(self, group, other):
         if group == 'snake:boy':
             print("충돌")
-            other.state_machine.add_event(('ATTACKED', 0))
-            if other.is_Attack:
-                game_world.remove_object(self)
-                pass
             pass

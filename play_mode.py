@@ -42,7 +42,7 @@ def init():
 
     for snake in snakes:
         game_world.add_collision_pair('snake:boy', snake, None)
-    game_world.add_collision_pair('snake:boy', None, boy)
+    game_world.add_collision_pair('snake:boy', None, server.boy)
 
 def update():
     game_world.update()

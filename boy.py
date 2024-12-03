@@ -16,6 +16,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 class Idle:
     @staticmethod
     def enter(boy, e):
+        boy.cur_state = Idle
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
             boy.action = 10
             boy.dir = boy.dir1  # dir1 값으로 Idle 상태에서 방향 설정
@@ -49,6 +50,7 @@ class Idle:
 class Run:
     @staticmethod
     def enter(boy, e):
+        boy.cur_state = Run
         boy.is_moving=True
         if d_down(e) or a_up(e):
             boy.dir1, boy.action = 1, 9  # 오른쪽 이동
@@ -82,6 +84,7 @@ class Run:
 class Attack:
     @staticmethod
     def enter(boy, e):
+        boy.cur_state = Attack
         boy.is_Attack=True
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
             boy.dir = boy.dir1  # Run 상태의 방향을 유지
@@ -120,6 +123,7 @@ class Attack:
 class Jump:
     @staticmethod
     def enter(boy, e):
+        boy.cur_state = Jump
         boy.jump_velocity = 10
         boy.is_jumping=True
         if space_down(e): #스페이스키를 눌러서 점프 시작
@@ -163,15 +167,16 @@ class Jump:
 class Attacked:
     @staticmethod
     def enter(boy, e):
+        boy.cur_state = Attacked
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
             boy.dir = boy.dir1  # Run 상태의 방향을 유지
-            boy.action=2
+            boy.action=9
         if isinstance(boy.state_machine.cur_state, Idle):  # Idle 상태에서 전환된 경우
             boy.dir = boy.dir1  # Run 상태의 방향을 유지
-            boy.action=2
+            boy.action=9
         if isinstance(boy.state_machine.cur_state, Attack):  # Idle 상태에서 전환된 경우
             boy.dir = boy.dir1  # Run 상태의 방향을 유지
-            boy.action = 2
+            boy.action =9
         pass
 
     @staticmethod
@@ -183,6 +188,7 @@ class Attacked:
     def do(boy):
         boy.x-=boy.dir1*0.5
         boy.frame = (boy.frame + 1) % 5
+        boy.hp-=1
         pass
 
 
@@ -207,6 +213,7 @@ class Boy:
         self.dir = 0
         self.action = 3
         self.hp=3
+        self.cur_state= Idle
         self.jump_velocity = 10
         self.jump_height = 10
         self.gravity = -1
@@ -221,9 +228,9 @@ class Boy:
             {
                 Idle: {d_down: Run, a_down: Run, a_up: Idle, d_up: Idle, space_down: Jump, s_down: Attack, s_up: Attack, attacked:Attacked},
                 Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, space_up: Jump, s_down: Attack, s_up: Attack, attacked: Attacked},
-                Attack: {s_down: Idle, s_up: Idle, attacked: Attacked},
+                Attack: {s_down: Idle, s_up: Idle},
                 Jump: {space_down: Jump, space_up: Jump, d_down: Idle, a_down:Idle, a_up:Idle, d_up:Idle, s_down:Attack, attacked: Attacked},
-                Attacked: {time_out:Idle}
+                Attacked: {d_down: Run, a_down:Run, a_up: Idle, d_up:Idle, s_down:Attack, s_up: Idle, space_down:Jump, space_up:Jump}
             }
         )
 
@@ -257,7 +264,16 @@ class Boy:
             self.on_ground = True
 
         if group=='snake:boy':
-            self.hp-=1
-            print("충돌")
-            self.state_machine.add_event(('ATTACKED', 0))
+            if self.cur_state== Idle:
+                print("충돌")
+                self.state_machine.add_event(('ATTACKED', 0))
+            if self.cur_state==Run:
+                print("충돌")
+                self.state_machine.add_event(('ATTACKED', 0))
+            if self.cur_state==Jump:
+                print("충돌")
+                self.state_machine.add_event(('ATTACKED', 0))
+            if self.cur_state == Attack:
+                print("소년의 공격")
+                other.shrink()
             pass
