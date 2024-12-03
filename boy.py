@@ -168,15 +168,16 @@ class Attacked:
     @staticmethod
     def enter(boy, e):
         boy.cur_state = Attacked
+        boy.frame=2
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
             boy.dir = boy.dir1  # Run 상태의 방향을 유지
-            boy.action=9
+            boy.action=1
         if isinstance(boy.state_machine.cur_state, Idle):  # Idle 상태에서 전환된 경우
             boy.dir = boy.dir1  # Run 상태의 방향을 유지
-            boy.action=9
+            boy.action=1
         if isinstance(boy.state_machine.cur_state, Attack):  # Idle 상태에서 전환된 경우
             boy.dir = boy.dir1  # Run 상태의 방향을 유지
-            boy.action =9
+            boy.action =1
         pass
 
     @staticmethod
@@ -186,21 +187,21 @@ class Attacked:
 
     @staticmethod
     def do(boy):
-        boy.x-=boy.dir1*0.5
-        boy.frame = (boy.frame + 1) % 5
-        boy.hp-=1
+        boy.x-=boy.dir*0.5
+        boy.frame = (boy.frame + 1) % 4
+        boy.action=1
         pass
 
 
     @staticmethod
     def draw(boy):
-        if boy.dir1 == 1:
+        if boy.dir == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 62, boy.action * 68, 62, 72, 0, 'h', boy.x, boy.y, 62, 69
+                boy.frame * 60, 7, 53, 72, 0, 'h', boy.x, boy.y, 62, 69
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 62, boy.action * 68, 62, 72, boy.x, boy.y, 62, 69
+                boy.frame * 60, 7, 52, 72, boy.x, boy.y, 62, 69
             )
         pass
 
@@ -264,15 +265,22 @@ class Boy:
             self.on_ground = True
 
         if group=='snake:boy':
-            if self.cur_state== Idle:
+            if self.cur_state== Idle or Run or Jump:
                 print("충돌")
                 self.state_machine.add_event(('ATTACKED', 0))
-            if self.cur_state==Run:
+                if self.hp==0:
+                    game_framework.quit()
+            if self.cur_state == Attack:
+                print("소년의 공격")
+                other.shrink()
+            pass
+
+        if group=='snail:boy':
+            if self.cur_state== Idle or Run or Jump:
                 print("충돌")
                 self.state_machine.add_event(('ATTACKED', 0))
-            if self.cur_state==Jump:
-                print("충돌")
-                self.state_machine.add_event(('ATTACKED', 0))
+                if self.hp==0:
+                    game_framework.quit()
             if self.cur_state == Attack:
                 print("소년의 공격")
                 other.shrink()

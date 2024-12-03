@@ -8,6 +8,7 @@ from grass import Grass, Grass2
 from boy import Boy
 import server
 from snake import *
+from snail import *
 
 def handle_events():
     events = get_events()
@@ -35,6 +36,7 @@ def init():
     game_world.add_object(server.boy, 2)
 
     global snakes
+
     snakes = [Snake(random.randint(500, 800-10), server.grass2.gy+20) for _ in range(5)]
     game_world.add_objects(snakes,2)
 
@@ -43,6 +45,14 @@ def init():
     for snake in snakes:
         game_world.add_collision_pair('snake:boy', snake, None)
     game_world.add_collision_pair('snake:boy', None, server.boy)
+
+    global snailes
+    snailes= [Snail(random.randint(10, 300), server.grass2.gy+20) for _ in range(5)]
+    game_world.add_objects(snailes,2)
+
+    for snail in snailes:
+        game_world.add_collision_pair('snail:boy', snail, None)
+    game_world.add_collision_pair('snail:boy', None, server.boy)
 
 def update():
     game_world.update()
