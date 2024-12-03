@@ -16,7 +16,7 @@ class Snake:
         self.x, self.y= x,y
         self.frame = 0
         self.action = 4
-        self.speed= 0.5
+        self.speed= random.uniform(0.1,0.5)
         self.size=2
         self.range=28
         self.dir = -1
