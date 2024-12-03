@@ -141,11 +141,11 @@ class Jump:
         boy.y += boy.jump_velocity
         boy.jump_velocity += boy.gravity
 
-        if boy.y <= server.grass2.gy + 40:  # 점프가 끝났을 때
+        if boy.y <= server.grass2.gy+30:  # 점프가 끝났을 때
             boy.is_jumping = False
             boy.on_ground= True
             boy.jump_velocity = 0
-            boy.y = server.grass2.gy + 40
+            boy.y = server.grass2.gy+30
             boy.dir=0 #정지 상태로 만들어주기
 
 
@@ -219,10 +219,10 @@ class Boy:
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {
-                Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run, space_down: Jump, s_down: Attack, s_up: Attack, attacked:Attacked},
+                Idle: {d_down: Run, a_down: Run, a_up: Idle, d_up: Idle, space_down: Jump, s_down: Attack, s_up: Attack, attacked:Attacked},
                 Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, space_up: Jump, s_down: Attack, s_up: Attack, attacked: Attacked},
                 Attack: {s_down: Idle, s_up: Idle, attacked: Attacked},
-                Jump: {space_down: Jump, d_down: Run, a_down:Run, a_up:Idle, d_up:Idle, s_down:Attack, attacked: Attacked},
+                Jump: {space_down: Jump, space_up: Jump, d_down: Idle, a_down:Idle, a_up:Idle, d_up:Idle, s_down:Attack, attacked: Attacked},
                 Attacked: {time_out:Idle}
             }
         )
@@ -260,7 +260,4 @@ class Boy:
             self.hp-=1
             print("충돌")
             self.state_machine.add_event(('ATTACKED', 0))
-
-            if self.is_Attack:
-                game_world.remove_object(other)
-                pass
+            pass
