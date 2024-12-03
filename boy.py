@@ -1,3 +1,4 @@
+from fontTools.merge.util import current_time
 from pico2d import *
 import math
 
@@ -169,6 +170,7 @@ class Attacked:
     @staticmethod
     def enter(boy, e):
         boy.cur_state = Attacked
+        boy.start_time=get_time()
         boy.frame=2
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
             boy.dir = boy.dir1  # Run 상태의 방향을 유지
@@ -185,24 +187,24 @@ class Attacked:
     def exit(boy, e):
         pass
 
-
     @staticmethod
     def do(boy):
-        boy.x-=boy.dir*0.5
-        boy.frame = (boy.frame + 1) % 4
-        boy.action=1
-        pass
+        boy.frame = boy.frame % 4 + 2
 
+        if get_time()-boy.start_time >2.0:
+            boy.frame=4
+            boy.state_machine.add_event(('TIME_OUT', 0))
+        pass
 
     @staticmethod
     def draw(boy):
         if boy.dir == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 60, 7, 53, 72, 0, 'h', boy.x, boy.y, 62, 69
+                boy.frame * 62, 7, 53, 72, 0, 'h', boy.x, boy.y, 62, 69
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 60, 7, 52, 72, boy.x, boy.y, 62, 69
+                boy.frame * 62, 7, 53, 72, boy.x, boy.y, 62, 69
             )
         pass
 
@@ -228,11 +230,11 @@ class Boy:
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {
-                Idle: {d_down: Run, a_down: Run, a_up: Idle, d_up: Idle, space_down: Jump, s_down: Attack, s_up: Attack, attacked:Attacked},
+                Idle: {d_down: Run, a_down: Run, a_up: Idle, d_up: Idle, space_down: Jump, space_up: Jump, s_down: Attack, s_up: Idle, attacked:Attacked},
                 Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, space_up: Jump, s_down: Attack, s_up: Attack, attacked: Attacked},
                 Attack: {s_down: Idle, s_up: Idle},
-                Jump: {space_down: Jump, space_up: Jump, d_down: Jump, a_down:Jump, a_up:Idle, d_up:Idle, s_down:Attack, attacked: Attacked},
-                Attacked: {d_down: Run, a_down:Run, a_up: Idle, d_up:Idle, s_down:Attack, s_up: Idle, space_down:Jump, space_up:Jump}
+                Jump: {space_down: Jump, space_up: Jump, d_down: Idle, a_down:Idle, a_up:Idle, d_up:Idle, s_down:Attack, attacked: Attacked},
+                Attacked: {time_out: Idle, d_down: Run, a_down:Run, a_up: Idle, d_up:Idle, s_down:Attack, s_up: Idle, space_down:Jump, space_up:Jump}
             }
         )
 
@@ -242,6 +244,7 @@ class Boy:
             self.x = self.min
             self.dir = 1  # 오른쪽으로 방향 전환
         elif self.x >= self.max:  # 최대 경계
+
             self.x = self.max
             self.dir = -1
 
