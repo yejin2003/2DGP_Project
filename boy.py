@@ -40,11 +40,11 @@ class Idle:
     def draw(boy):
         if boy.dir == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 61, boy.action * 71, 60, 78, 0, 'h', boy.x, boy.y, 62, 75
+                boy.frame * 61, boy.action * 71, 60, 78, 0, 'h', boy.x, 90, 62, 75
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 61, boy.action * 71, 60, 78, boy.x, boy.y ,62, 75
+                boy.frame * 61, boy.action * 71, 60, 78, boy.x, 90 ,62, 75
             )
 
 
@@ -75,11 +75,11 @@ class Run:
     def draw(boy):
         if boy.dir1 == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 62, boy.action * 68, 62, 72, 0, 'h', boy.x, boy.y, 62, 69
+                boy.frame * 62, boy.action * 68, 62, 72, 0, 'h', boy.x, 90, 62, 69
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 62, boy.action * 68, 62, 72, boy.x, boy.y, 62, 69
+                boy.frame * 62, boy.action * 68, 62, 72, boy.x, 90, 62, 69
             )
 
 class Attack:
@@ -114,11 +114,11 @@ class Attack:
     def draw(boy):
         if boy.dir == 1:  # 오른쪽
             boy.image.clip_composite_draw(
-                boy.frame * 62, boy.action * 65, 63, 72, 0, 'h', boy.x, boy.y, 62, 69
+                boy.frame * 62, boy.action * 65, 63, 72, 0, 'h', boy.x, 90, 62, 69
             )
         else:  # 왼쪽
             boy.image.clip_draw(
-                boy.frame * 62, boy.action * 65, 63, 72, boy.x, boy.y
+                boy.frame * 62, boy.action * 65, 63, 72, boy.x, 90
             )
 
 class Jump:
@@ -222,11 +222,11 @@ class Attacked:
     def draw(boy):
         if boy.dir == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 62, 7, 53, 72, 0, 'h', boy.x, boy.y, 62, 69
+                boy.frame * 62, 7, 53, 72, 0, 'h', boy.x, 90, 62, 69
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 62, 7, 53, 72, boy.x, boy.y, 62, 69
+                boy.frame * 62, 7, 53, 72, boy.x, 90, 62, 69
             )
         pass
 
