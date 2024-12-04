@@ -188,6 +188,7 @@ class Attacked:
     def exit(boy, e):
         if boy.hp > 0:  # HP가 남아있을 경우
             boy.hp -= 1  # HP 감소
+            boy.is_Attacked = False
             print(f"Attacked 상태 종료. 현재 HP: {boy.hp}")
 
         if boy.hp <= 0:  # HP가 0일 경우 게임 종료
@@ -268,7 +269,6 @@ class Boy:
             self.x = self.min
             self.dir = 1  # 오른쪽으로 방향 전환
         elif self.x >= self.max:  # 최대 경계
-
             self.x = self.max
             self.dir = -1
 
@@ -289,7 +289,6 @@ class Boy:
 
     def attacked_back(self):
         self.x-=20
-        print(self.hp)
         pass
 
     def handle_collision(self, group, other):
@@ -297,24 +296,37 @@ class Boy:
             self.is_jumping = False
             self.on_ground = True
 
-        if group=='snake:boy':
-            if self.cur_state == Idle or Run or Jump:
-                self.is_Attacked=True
-                self.attacked_time=2.0
-                self.last_time=get_time()
-                self.state_machine.add_event(('ATTACKED',0))
-            if self.cur_state == Attack:
-                print("소년의 공격")
-                other.shrink()
+        if group in ('snake:boy', 'snail:boy'):  # snake와 snail 공통 처리
+            if not self.is_Attacked:  # 무적 상태가 아닌 경우
+                if self.cur_state in (Idle, Run, Jump):  # 현재 상태 체크
+                    self.is_Attacked = True  # 무적 상태 활성화
+                    self.attacked_time = 2.0  # 무적 시간 초기화
+                    self.last_time = get_time()  # 시간 기록
+                    self.state_machine.add_event(('ATTACKED', 0))  # Attacked 상태 전환
+                    print(f"충돌 발생: {group}, 현재 HP: {self.hp}, 무적 상태 시작")
 
-        if group=='snail:boy':
-            if self.cur_state == Idle or Run or Jump:
-                self.hp-=1
-                self.is_Attacked=True
-                self.attacked_time=2.0
-                self.state_machine.add_event(('ATTACKED',0))
-                if self.hp==0:
-                    game_framework.quit()
-            if self.cur_state == Attack:
-                print("소년의 공격")
-                other.shrink()
+            if self.cur_state == Attack:  # 공격 상태인 경우
+                print(f"소년의 공격 성공: {group}")
+                other.shrink()  # 다른 객체에 공격 효과 적용
+
+        # if group=='snail:boy':
+        #     if not self.is_Attacked:
+        #         if self.cur_state == Idle or Run or Jump:
+        #             self.is_Attacked=True
+        #             self.attacked_time=2.0
+        #             self.last_time=get_time()
+        #             self.state_machine.add_event(('ATTACKED',0))
+        #     if self.cur_state == Attack:
+        #         print("소년의 공격")
+        #         other.shrink()
+        #
+        # if group=='snake:boy':
+        #     if not self.is_Attacked:
+        #         if self.cur_state == Idle or Run or Jump:
+        #             self.is_Attacked=True
+        #             self.attacked_time=2.0
+        #             self.last_time=get_time()
+        #             self.state_machine.add_event(('ATTACKED',0))
+        #     if self.cur_state == Attack:
+        #         print("소년의 공격")
+        #         other.shrink()

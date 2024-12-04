@@ -33,7 +33,7 @@ class Snail:
         self.x += self.speed * self.dir
         # 경계 확인 및 방향 전환
         if self.x <= self.min:  # 최소 경계
-            self.x -=self.speed * self.dir
+            self.x -= self.speed * self.dir
             self.dir = 1  # 오른쪽으로 방향 전환
         elif self.x >= self.max:  # 최대 경계
             self.x += self.speed * self.dir
@@ -51,7 +51,7 @@ class Snail:
         pass
 
     def get_bb(self):
-        return self.x - 20, self.y - 20, self.x + 20, self.y + 20
+        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
         pass
 
     def shrink(self):
