@@ -171,6 +171,7 @@ class Attacked:
     def enter(boy, e):
         boy.cur_state = Attacked
         boy.start_time=get_time()
+        boy.is_moving=False
         boy.frame=2
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
             boy.dir = boy.dir1  # Run 상태의 방향을 유지
@@ -185,16 +186,36 @@ class Attacked:
 
     @staticmethod
     def exit(boy, e):
+        if boy.hp > 0:  # HP가 남아있을 경우
+            boy.hp -= 1  # HP 감소
+            print(f"Attacked 상태 종료. 현재 HP: {boy.hp}")
+
+        if boy.hp <= 0:  # HP가 0일 경우 게임 종료
+            print("게임 종료")
+            game_framework.quit()
         pass
 
     @staticmethod
     def do(boy):
-        boy.frame = boy.frame % 4 + 2
+        current_time=get_time()
+        if current_time-boy.frame_update_time>=0.10:
+            boy.frame_update_time=current_time
+            boy.frame = boy.frame % 4 + 2
 
-        if get_time()-boy.start_time >2.0:
-            boy.frame=4
+            if get_time()-boy.start_time>1.2:
+                boy.frame=4
+
+        if boy.is_Attacked:
+            boy.attacked_back()
+
+        boy.attacked_time -= pico2d.get_time() - boy.last_time
+        if boy.attacked_time<=0:
+            boy.is_Attacked=False
+            boy.attacked_time = 0
             boy.state_machine.add_event(('TIME_OUT', 0))
-        pass
+            print("무적 상태 해제")
+
+        boy.last_time=get_time()
 
     @staticmethod
     def draw(boy):
@@ -224,7 +245,10 @@ class Boy:
         self.is_jumping = False
         self.is_moving= True
         self.on_ground= False
-        self.is_Attack=False
+        self.is_Attacked=False
+        self.frame_update_time=0
+        self.last_time=0
+        self.attacked_time=0
         self.image = load_image('img/boy.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
@@ -263,29 +287,34 @@ class Boy:
         return self.x - 30, self.y - 40, self.x + 30, self.y + 40
         pass
 
+    def attacked_back(self):
+        self.x-=20
+        print(self.hp)
+        pass
+
     def handle_collision(self, group, other):
         if group == 'grass:boy':
             self.is_jumping = False
             self.on_ground = True
 
         if group=='snake:boy':
-            if self.cur_state== Idle or Run or Jump:
-                print("충돌")
-                self.state_machine.add_event(('ATTACKED', 0))
-                if self.hp==0:
-                    game_framework.quit()
+            if self.cur_state == Idle or Run or Jump:
+                self.is_Attacked=True
+                self.attacked_time=2.0
+                self.last_time=get_time()
+                self.state_machine.add_event(('ATTACKED',0))
             if self.cur_state == Attack:
                 print("소년의 공격")
                 other.shrink()
-            pass
 
         if group=='snail:boy':
-            if self.cur_state== Idle or Run or Jump:
-                print("충돌")
-                self.state_machine.add_event(('ATTACKED', 0))
+            if self.cur_state == Idle or Run or Jump:
+                self.hp-=1
+                self.is_Attacked=True
+                self.attacked_time=2.0
+                self.state_machine.add_event(('ATTACKED',0))
                 if self.hp==0:
                     game_framework.quit()
             if self.cur_state == Attack:
                 print("소년의 공격")
                 other.shrink()
-            pass
