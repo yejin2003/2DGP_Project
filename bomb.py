@@ -14,7 +14,7 @@ class Bomb:
     def __init__(self,x,y):
         import server
         self.x, self.y= x,y
-        self.speed= random.uniform(0.8,1.0)
+        self.speed= random.uniform(1.0,2.0)
         self.on_ground= False
         self.image = load_image('img/bomb.png')
         self.min= 90

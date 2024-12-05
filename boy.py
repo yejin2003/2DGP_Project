@@ -204,7 +204,7 @@ class Attacked:
             boy.frame = boy.frame % 4 + 2
 
             if get_time()-boy.start_time>1.2:
-                boy.frame=4
+                boy.frame=3
 
         if boy.is_Attacked:
             boy.attacked_back()
@@ -222,11 +222,11 @@ class Attacked:
     def draw(boy):
         if boy.dir == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 62, 7, 53, 72, 0, 'h', boy.x, 90, 62, 69
+                boy.frame * 65, 7, 60, 72, 0, 'h', boy.x, 90, 62, 69
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 62, 7, 53, 72, boy.x, 90, 62, 69
+                boy.frame * 65, 7, 60, 72, boy.x, 90, 62, 69
             )
         pass
 
