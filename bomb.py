@@ -14,7 +14,7 @@ class Bomb:
     def __init__(self,x,y):
         import server
         self.x, self.y= x,y
-        self.speed= random.uniform(1.0,2.0)
+        self.speed= random.uniform(1.5,2.0)
         self.on_ground= False
         self.image = load_image('img/bomb.png')
         self.min= 90
@@ -28,7 +28,7 @@ class Bomb:
         self.image.clip_draw(0,0,106, 114, self.x, self.y, 30, 40)
 
     def get_bb(self):
-        return self.x - 20, self.y - 20, self.x + 20, self.y + 20
+        return self.x - 15, self.y - 20, self.x + 15, self.y + 20
         pass
 
     def shrink(self):

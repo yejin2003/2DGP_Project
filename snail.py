@@ -19,7 +19,7 @@ class Snail:
         self.speed= random.uniform(0.5,0.8)
         self.size=2
         self.range=28
-        self.dir = 1
+        self.dir = -1
         self.action = 3
         self.on_ground= False
         self.image = load_image('img/snail_monster.png')

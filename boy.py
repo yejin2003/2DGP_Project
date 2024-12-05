@@ -222,11 +222,11 @@ class Attacked:
     def draw(boy):
         if boy.dir == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 65, 7, 60, 72, 0, 'h', boy.x, 90, 62, 69
+                114, 7, 54, 74, 0, 'h', boy.x, 90, 62, 69
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 65, 7, 60, 72, boy.x, 90, 62, 69
+                114, 7, 54, 74, boy.x, 90, 62, 69
             )
         pass
 
