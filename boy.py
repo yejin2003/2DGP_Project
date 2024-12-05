@@ -21,6 +21,9 @@ class Idle:
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
             boy.action = 10
             boy.dir = boy.dir1  # dir1 값으로 Idle 상태에서 방향 설정
+        if isinstance(boy.state_machine.cur_state, Jump):  # Run 상태에서 전환된 경우
+            boy.dir = boy.dir1  # Run 상태의 방향을 유지
+            boy.action=10
         else:
             boy.frame = 2
             boy.action=10
@@ -138,8 +141,6 @@ class Jump:
 
     @staticmethod
     def exit(boy, e):
-        boy.y=90
-        boy.cur_state=Idle
         pass
 
     @staticmethod
@@ -151,10 +152,10 @@ class Jump:
         if boy.y <= 90:  # 점프가 끝났을 때
             boy.is_jumping = False
             boy.on_ground= True
+            boy.y = 90
             boy.jump_velocity = 0
             boy.dir=0
-            #boy.state_machine.add_event(('IDLE', 0))
-
+            boy.state_machine.add_event(('IDLE', 0))
 
     @staticmethod
     def draw(boy):
@@ -259,7 +260,7 @@ class Boy:
                 Idle: {d_down: Run, a_down: Run, a_up: Idle, d_up: Idle, space_down: Jump, space_up: Jump, s_down: Attack, s_up: Idle, attacked:Attacked},
                 Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, space_up: Jump, s_down: Attack, s_up: Attack, attacked: Attacked},
                 Attack: {s_down: Idle, s_up: Idle},
-                Jump: {space_down: Jump, space_up: Jump, d_down: Idle, a_down:Idle, a_up:Idle, d_up:Idle, s_down:Attack, attacked: Attacked},
+                Jump: {space_down: Jump, space_up: Jump, d_down: Idle, a_down:Idle, a_up:Idle, d_up:Idle, s_down:Attack, attacked: Attacked, idle:Idle},
                 Attacked: {time_out: Idle}
             }
         )
