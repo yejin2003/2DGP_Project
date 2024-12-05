@@ -61,3 +61,5 @@ class Snake:
         if group == 'snake:boy':
             print("충돌")
             pass
+        if group=='snake:bomb':
+            pass

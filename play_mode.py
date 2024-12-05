@@ -54,27 +54,32 @@ def init():
 
     for snake in snakes:
         game_world.add_collision_pair('snake:boy', snake, None)
+        game_world.add_collision_pair('snake:bomb', snake, None)
     game_world.add_collision_pair('snake:boy', None, server.boy)
 
     global snailes
-    snail_positions = [630 + i * 50 for i in range(5)]  # 5 snails, 40 units apart
+    snail_positions = [630 + i * 50 for i in range(3)]  # 5 snails, 40 units apart
     snailes = [Snail(x, server.grass2.gy + 20) for x in snail_positions]
     # snailes= [Snail(random.randint(600, 800-10), server.grass2.gy+20) for _ in range(3)]
     game_world.add_objects(snailes,2)
 
     for snail in snailes:
         game_world.add_collision_pair('snail:boy', snail, None)
+        game_world.add_collision_pair('snail:bomb', snail, None)
     game_world.add_collision_pair('snail:boy', None, server.boy)
 
     global bombs
-    bombs=[Bomb(random. randint(10, 700),450-10) for _ in range(5)]
+    bombs=[Bomb(random. randint(10, 700),450-10) for _ in range(3)]
     game_world.add_objects(bombs, 2)
 
     for bomb in bombs:
         game_world.add_collision_pair('bomb:boy', bomb, None)
         game_world.add_collision_pair('bomb:grass', bomb, None)
+        game_world.add_collision_pair('snail:bomb', None, bomb)
+        game_world.add_collision_pair('snake:bomb', None, bomb)
     game_world.add_collision_pair('bomb:boy', None, server.boy)
     game_world.add_collision_pair('bomb:grass', None, server.grass2)
+
 
     global bomb_spawn_timer
     bomb_spawn_timer = 0  # 폭탄 생성 타이머
@@ -93,7 +98,7 @@ def update():
     # 폭탄 생성 타이머 증가
     bomb_spawn_timer += 1
     if bomb_spawn_timer > 200:  # 약 2초마다 폭탄 추가 생성
-        for _ in range(5):  # 한 번에 5개의 폭탄 생성
+        for _ in range(3):  # 한 번에 5개의 폭탄 생성
             new_bomb = Bomb(random.randint(30, 800 - 30), 450 - 10)
             game_world.add_object(new_bomb, 2)
 

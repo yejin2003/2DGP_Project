@@ -126,11 +126,11 @@ class Jump:
     @staticmethod
     def enter(boy, e):
         boy.cur_state = Jump
-        boy.jump_velocity = 15
+        boy.jump_velocity = 20
+        boy.action = 9
         boy.is_jumping=True
         if space_down(e): #스페이스키를 눌러서 점프 시작
-            boy.action=9
-            boy.jump_velocity = 10
+            pass
         if d_down(e):
             boy.dir=-1
         if a_down(e):
@@ -138,7 +138,6 @@ class Jump:
 
     @staticmethod
     def exit(boy, e):
-        boy.dir = boy.dir1
         boy.cur_state = Idle
         boy.y=90
         pass
@@ -281,7 +280,7 @@ class Boy:
             self.cur_state.enter(self.boy, event)
 
     def draw(self):
-        #draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_bb())
         self.state_machine.draw()
 
     def get_bb(self):

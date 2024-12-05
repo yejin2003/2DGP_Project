@@ -16,7 +16,7 @@ class Snail:
         self.x, self.y= x,y
         self.frame = 0
         self.action = 4
-        self.speed= random.uniform(0.5,0.8)
+        self.speed= random.uniform(0.5,1.0)
         self.size=2
         self.range=28
         self.dir = -1
@@ -60,4 +60,7 @@ class Snail:
     def handle_collision(self, group, other):
         if group == 'snail:boy':
             print("충돌")
+            pass
+
+        if group=='snail:bomb':
             pass
