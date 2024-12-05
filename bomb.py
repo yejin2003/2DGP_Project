@@ -18,6 +18,7 @@ class Bomb:
         self.on_ground= False
         self.image = load_image('img/bomb.png')
         self.min= 90
+        self.removed = False
 
     def update(self):
         self.y -= self.speed
@@ -39,5 +40,7 @@ class Bomb:
             pass
 
         if group=='bomb:grass':
-            game_world.remove_object(self)
+            if not self.removed:
+                game_world.remove_object(self)
+                self.removed=True
             pass
