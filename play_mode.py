@@ -69,8 +69,6 @@ def init():
     for _ in range(4):
         snail = Snail(random.randint(500, 800-10), server.grass2.gy + 20)
         game_world.add_object(snail, 2)
-        game_world.add_collision_pair('snake:boy', snail, None)
-        game_world.add_collision_pair('snake:bomb', snail, None)
         game_world.add_collision_pair('snail:boy', snail, None)
         game_world.add_collision_pair('snail:bomb', snail, None)
 

@@ -126,7 +126,7 @@ class Jump:
     @staticmethod
     def enter(boy, e):
         boy.cur_state = Jump
-        boy.jump_velocity = 20
+        boy.jump_velocity = 10
         boy.action = 9
         boy.is_jumping=True
         if space_down(e): #스페이스키를 눌러서 점프 시작
@@ -138,8 +138,8 @@ class Jump:
 
     @staticmethod
     def exit(boy, e):
-        boy.cur_state = Idle
         boy.y=90
+        boy.cur_state=Idle
         pass
 
     @staticmethod
@@ -299,7 +299,7 @@ class Boy:
 
         if group in ('snake:boy', 'snail:boy'):  # snake와 snail 공통 처리
             if not self.is_Attacked:  # 무적 상태가 아닌 경우
-                if self.cur_state in (Idle, Run, Jump):  # 현재 상태 체크
+                if self.cur_state in (Idle, Run):  # 현재 상태 체크
                     self.is_Attacked = True  # 무적 상태 활성화
                     self.attacked_time = 2.0  # 무적 시간 초기화
                     self.last_time = get_time()  # 시간 기록

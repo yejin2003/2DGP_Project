@@ -23,8 +23,8 @@ class Snake:
         self.action = 3
         self.on_ground= False
         self.image = load_image('img/snake_monster.png')
-        self.max= 800-10
-        self.min= 10
+        self.max= 450
+        self.min= 100
 
     def update(self):
 
@@ -33,10 +33,10 @@ class Snake:
         self.x += self.speed * self.dir
         # 경계 확인 및 방향 전환
         if self.x <= self.min:  # 최소 경계
-            self.x -=self.speed * self.dir
+            self.x -= self.speed * self.dir
             self.dir = 1  # 오른쪽으로 방향 전환
         elif self.x >= self.max:  # 최대 경계
-            self.x += self.speed * self.dir
+            self.x -= self.speed * self.dir
             self.dir = -1
         pass
 

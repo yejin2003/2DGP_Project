@@ -24,7 +24,7 @@ class Snail:
         self.on_ground= False
         self.image = load_image('img/snail_monster.png')
         self.max= 800-10
-        self.min= 10
+        self.min= 500
 
     def update(self):
 
@@ -36,7 +36,7 @@ class Snail:
             self.x -= self.speed * self.dir
             self.dir = 1  # 오른쪽으로 방향 전환
         elif self.x >= self.max:  # 최대 경계
-            self.x += self.speed * self.dir
+            self.x -= self.speed * self.dir
             self.dir = -1
         pass
 
@@ -51,7 +51,7 @@ class Snail:
         pass
 
     def get_bb(self):
-        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
+        return self.x - 15, self.y - 10, self.x + 15, self.y + 10
         pass
 
     def shrink(self):
