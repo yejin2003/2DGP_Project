@@ -59,6 +59,10 @@ def init():
     bombs=[Bomb(random. randint(30, 800-30),450-10) for _ in range(5)]
     game_world.add_objects(bombs, 2)
 
+    for bomb in bombs:
+        game_world.add_collision_pair('bomb:boy', bomb, None)
+        game_world.add_collision_pair('bomb:boy', None, server.boy)
+
     global bomb_spawn_timer
     bomb_spawn_timer = 0  # 폭탄 생성 타이머
 

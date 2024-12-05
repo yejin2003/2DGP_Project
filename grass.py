@@ -28,6 +28,7 @@ class Grass2:
         pass
 
     def draw(self):
+        draw_rectangle(*self.get_bb())
         screen_width = 800  # 화면의 너비 (필요에 따라 변경)
         tile_width = 107  # 타일 너비
 
@@ -36,8 +37,14 @@ class Grass2:
             self.image.clip_draw(0, 0, 89, 20, self.x, self.gy, 200, 17)
 
     def get_bb(self):
-        return self.x, self.x+30, self.gy, self.gy-25
-        pass
+        screen_width = 800  # 화면 너비
+        left = 0  # 왼쪽 x좌표
+        bottom = self.gy - 8.5  # 바운딩 박스 하단
+        right = screen_width  # 오른쪽 x좌표
+        top = self.gy+10  # 바운딩 박스 상단
+
+        return left, bottom, right, top
 
     def handle_collision(self, group, other):
-        pass
+        if group=='grass:bomb':
+            pass

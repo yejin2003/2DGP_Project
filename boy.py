@@ -308,3 +308,12 @@ class Boy:
             if self.cur_state == Attack:  # 공격 상태인 경우
                 print(f"소년의 공격 성공: {group}")
                 other.shrink()  # 다른 객체에 공격 효과 적용
+
+        if group =='bomb:boy':
+            if self.cur_state in (Idle, Run, Jump, Attack):  # 현재 상태 체크
+                self.is_Attacked = True  # 무적 상태 활성화
+                self.attacked_time = 2.0  # 무적 시간 초기화
+                self.last_time = get_time()  # 시간 기록
+                self.state_machine.add_event(('ATTACKED', 0))  # Attacked 상태 전환
+                print(f"충돌 발생: {group}, 현재 HP: {self.hp}, 무적 상태 시작")
+            pass
