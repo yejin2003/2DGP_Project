@@ -141,6 +141,7 @@ class Jump:
 
     @staticmethod
     def exit(boy, e):
+        boy.dir1=boy.dir
         pass
 
     @staticmethod
