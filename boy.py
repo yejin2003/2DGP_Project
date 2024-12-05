@@ -5,7 +5,7 @@ import math
 import game_framework
 import game_world
 import grass
-from statemachine import start_event, a_down, a_up, d_down, d_up, s_down, s_up, space_down, space_up, StateMachine, time_out, attacked
+from statemachine import start_event, a_down, a_up, d_down, d_up, s_down, s_up, space_down, space_up, StateMachine, time_out, attacked, idle
 import server
 
 PIXEL_PER_METER = (10.0 / 0.2)  # 10 pixel 20 cm
@@ -35,16 +35,17 @@ class Idle:
         if get_time() - boy.wait_time > 3:
             boy.state_machine.handle_event(('TIME_OUT', 0))
         boy.frame = 2
+        boy.y=90
 
     @staticmethod
     def draw(boy):
         if boy.dir == 1:
             boy.image.clip_composite_draw(
-                boy.frame * 61, boy.action * 71, 60, 78, 0, 'h', boy.x, 90, 62, 75
+                boy.frame * 61, boy.action * 71, 60, 78, 0, 'h', boy.x, boy.y, 62, 75
             )
         else:
             boy.image.clip_draw(
-                boy.frame * 61, boy.action * 71, 60, 78, boy.x, 90 ,62, 75
+                boy.frame * 61, boy.action * 71, 60, 78, boy.x, boy.y ,62, 75
             )
 
 
@@ -139,6 +140,7 @@ class Jump:
     def exit(boy, e):
         boy.dir = boy.dir1
         boy.cur_state = Idle
+        boy.y=90
         pass
 
     @staticmethod
@@ -151,8 +153,8 @@ class Jump:
             boy.is_jumping = False
             boy.on_ground= True
             boy.jump_velocity = 0
-            boy.y = 90
-            boy.dir=0 #정지 상태로 만들어주기
+            boy.dir=0
+            #boy.state_machine.add_event(('IDLE', 0))
 
 
     @staticmethod
@@ -284,7 +286,7 @@ class Boy:
 
     def get_bb(self):
         # fill here
-        return self.x - 20, self.y - 20, self.x + 20, self.y + 40
+        return self.x - 20, self.y - 30, self.x + 20, self.y + 40
         pass
 
     def attacked_back(self):

@@ -33,6 +33,9 @@ def s_up(e):
 def attacked(e):
     return e[0] == 'ATTACKED'
 
+def idle(e):
+    return e[0] == 'IDLE'
+
 class StateMachine:
     def __init__(self, o):
         self.o = o

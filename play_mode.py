@@ -1,3 +1,4 @@
+import numpy as np
 from pico2d import *
 
 import random
@@ -10,6 +11,7 @@ import server
 from snake import *
 from snail import *
 from bomb import *
+from hp import *
 
 def handle_events():
     events = get_events()
@@ -68,6 +70,8 @@ def init():
     global bomb_spawn_timer
     bomb_spawn_timer = 0  # 폭탄 생성 타이머
 
+    x_positions = np.linspace(20, 80, num=3)  # 시작값, 끝값, 개수
+    hp = [HP(x, 430) for x in x_positions]
 
 def update():
     global bomb_spawn_timer
