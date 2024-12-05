@@ -61,7 +61,9 @@ def init():
 
     for bomb in bombs:
         game_world.add_collision_pair('bomb:boy', bomb, None)
-        game_world.add_collision_pair('bomb:boy', None, server.boy)
+        game_world.add_collision_pair('bomb:grass', bomb, None)
+    game_world.add_collision_pair('bomb:boy', None, server.boy)
+    game_world.add_collision_pair('bomb:grass', None, server.grass2)
 
     global bomb_spawn_timer
     bomb_spawn_timer = 0  # 폭탄 생성 타이머

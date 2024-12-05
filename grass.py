@@ -46,5 +46,5 @@ class Grass2:
         return left, bottom, right, top
 
     def handle_collision(self, group, other):
-        if group=='grass:bomb':
+        if group=='bomb:grass':
             pass

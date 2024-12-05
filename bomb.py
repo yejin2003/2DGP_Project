@@ -39,4 +39,5 @@ class Bomb:
             pass
 
         if group=='bomb:grass':
+            game_world.remove_object(self)
             pass
