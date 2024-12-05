@@ -9,6 +9,7 @@ from boy import Boy
 import server
 from snake import *
 from snail import *
+from bomb import *
 
 def handle_events():
     events = get_events()
@@ -54,8 +55,31 @@ def init():
         game_world.add_collision_pair('snail:boy', snail, None)
     game_world.add_collision_pair('snail:boy', None, server.boy)
 
+    global bombs
+    bombs=[Bomb(random. randint(30, 800-30),450-10) for _ in range(5)]
+    game_world.add_objects(bombs, 2)
+
+    global bomb_spawn_timer
+    bomb_spawn_timer = 0  # 폭탄 생성 타이머
+
 def update():
+    global bomb_spawn_timer
     game_world.update()
+
+    # # 폭탄 생성 타이머 증가
+    # bomb_spawn_timer += 1
+    # if bomb_spawn_timer > 100:  # 약 1초마다 폭탄 추가 생성
+    #     new_bomb = [Bomb(random. randint(30, 800-30),450-10) for _ in range(5)]
+    #     game_world.add_object(new_bomb, 2)
+    #     bomb_spawn_timer = 0
+    #
+    # # 폭탄이 아래로 계속 떨어지게 설정
+    # for bomb in game_world.objects_at_layer(2):  # Layer 2에 있는 객체 검사
+    #     if isinstance(bomb, Bomb):
+    #         bomb.y -= bomb.speed  # 떨어지는 속도 조절
+    #         if bomb.y < 0:  # 화면 밖으로 나가면 제거
+    #             game_world.remove_object(bomb)
+
     game_world.handle_collisions()
     delay(0.01)
 

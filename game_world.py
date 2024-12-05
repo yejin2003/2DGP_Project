@@ -32,6 +32,9 @@ def render():
         for o in layer:
             o.draw()
 
+def objects_at_layer(layer):
+    return world[layer]
+
 def remove_collision_object(o):
     for pairs in collision_pairs.values():
         if o in pairs[0]:

@@ -232,7 +232,7 @@ class Attacked:
 
 class Boy:
     def __init__(self):
-        self.x, self.y = 400, server.grass2.gy+30
+        self.x, self.y = 20, server.grass2.gy+30
         self.max = 800 - 10
         self.min = 10
         self.frame = 0
@@ -259,7 +259,7 @@ class Boy:
                 Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, space_down: Jump, space_up: Jump, s_down: Attack, s_up: Attack, attacked: Attacked},
                 Attack: {s_down: Idle, s_up: Idle},
                 Jump: {space_down: Jump, space_up: Jump, d_down: Idle, a_down:Idle, a_up:Idle, d_up:Idle, s_down:Attack, attacked: Attacked},
-                Attacked: {time_out: Idle, d_down: Run, a_down:Run, a_up: Idle, d_up:Idle, s_down:Attack, s_up: Idle, space_down:Jump, space_up:Jump}
+                Attacked: {time_out: Idle}
             }
         )
 
@@ -284,7 +284,7 @@ class Boy:
 
     def get_bb(self):
         # fill here
-        return self.x - 30, self.y - 40, self.x + 30, self.y + 40
+        return self.x - 20, self.y - 20, self.x + 20, self.y + 40
         pass
 
     def attacked_back(self):
@@ -308,25 +308,3 @@ class Boy:
             if self.cur_state == Attack:  # 공격 상태인 경우
                 print(f"소년의 공격 성공: {group}")
                 other.shrink()  # 다른 객체에 공격 효과 적용
-
-        # if group=='snail:boy':
-        #     if not self.is_Attacked:
-        #         if self.cur_state == Idle or Run or Jump:
-        #             self.is_Attacked=True
-        #             self.attacked_time=2.0
-        #             self.last_time=get_time()
-        #             self.state_machine.add_event(('ATTACKED',0))
-        #     if self.cur_state == Attack:
-        #         print("소년의 공격")
-        #         other.shrink()
-        #
-        # if group=='snake:boy':
-        #     if not self.is_Attacked:
-        #         if self.cur_state == Idle or Run or Jump:
-        #             self.is_Attacked=True
-        #             self.attacked_time=2.0
-        #             self.last_time=get_time()
-        #             self.state_machine.add_event(('ATTACKED',0))
-        #     if self.cur_state == Attack:
-        #         print("소년의 공격")
-        #         other.shrink()
