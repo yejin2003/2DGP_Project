@@ -1,5 +1,8 @@
 from pico2d import load_image
 
+import game_world
+import server
+
 class HP:
     def __init__(self,x,y):
         self.image = load_image('img/hp.png')
@@ -11,4 +14,8 @@ class HP:
         pass
 
     def update(self):
+        # if server.boy.hp==2:
+        #     game_world.remove_object(self)
+        # elif server.boy.hp==1:
+        #     game_world.remove_object(self)
         pass

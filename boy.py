@@ -126,7 +126,7 @@ class Jump:
     @staticmethod
     def enter(boy, e):
         boy.cur_state = Jump
-        boy.jump_velocity = 10
+        boy.jump_velocity = 15
         boy.is_jumping=True
         if space_down(e): #스페이스키를 눌러서 점프 시작
             boy.action=9
@@ -159,7 +159,7 @@ class Jump:
 
     @staticmethod
     def draw(boy):
-        if boy.dir1 == 1:
+        if boy.dir == 1:
             boy.image.clip_composite_draw(
                 boy.frame * 62, boy.action * 68, 62, 72, 0, 'h', boy.x, boy.y, 62, 69
             )
@@ -281,7 +281,7 @@ class Boy:
             self.cur_state.enter(self.boy, event)
 
     def draw(self):
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         self.state_machine.draw()
 
     def get_bb(self):

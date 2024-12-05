@@ -21,7 +21,6 @@ def handle_events():
         else:
             server.boy.handle_event(event)
 
-
 def init():
     global running
     running = True
@@ -38,9 +37,17 @@ def init():
     server.boy = Boy()
     game_world.add_object(server.boy, 2)
 
+
     global snakes
 
-    snakes = [Snake(random.randint(600, 800-10), server.grass2.gy+20) for _ in range(5)]
+    # Snake and Snail generation with fixed spacing
+    snake_positions = [400 + i * 50 for i in range(5)]  # 5 snakes, 40 units apart
+
+
+    # Create Snake objects
+    snakes = [Snake(x, server.grass2.gy + 20) for x in snake_positions]
+
+    # snakes = [Snake(random.randint(400, 600), server.grass2.gy+20) for _ in range(3)]
     game_world.add_objects(snakes,2)
 
     game_world.add_collision_pair('grass:boy', server.boy, None)
@@ -50,7 +57,9 @@ def init():
     game_world.add_collision_pair('snake:boy', None, server.boy)
 
     global snailes
-    snailes= [Snail(random.randint(600, 800-10), server.grass2.gy+20) for _ in range(5)]
+    snail_positions = [630 + i * 50 for i in range(5)]  # 5 snails, 40 units apart
+    snailes = [Snail(x, server.grass2.gy + 20) for x in snail_positions]
+    # snailes= [Snail(random.randint(600, 800-10), server.grass2.gy+20) for _ in range(3)]
     game_world.add_objects(snailes,2)
 
     for snail in snailes:
@@ -58,7 +67,7 @@ def init():
     game_world.add_collision_pair('snail:boy', None, server.boy)
 
     global bombs
-    bombs=[Bomb(random. randint(30, 800-30),450-10) for _ in range(5)]
+    bombs=[Bomb(random. randint(10, 700),450-10) for _ in range(5)]
     game_world.add_objects(bombs, 2)
 
     for bomb in bombs:
@@ -70,8 +79,10 @@ def init():
     global bomb_spawn_timer
     bomb_spawn_timer = 0  # 폭탄 생성 타이머
 
-    x_positions = np.linspace(20, 80, num=3)  # 시작값, 끝값, 개수
-    hp = [HP(x, 430) for x in x_positions]
+    global hp_objects  # 전역 hp_objects 리스트를 수정할 수 있도록 선언
+    x_positions = np.linspace(20, 80, num=3)
+    hp_objects = [HP(x, 430) for x in x_positions]
+    game_world.add_objects(hp_objects, 3)
 
 def update():
     global bomb_spawn_timer
@@ -81,7 +92,7 @@ def update():
 
     # 폭탄 생성 타이머 증가
     bomb_spawn_timer += 1
-    if bomb_spawn_timer > 300:  # 약 3초마다 폭탄 추가 생성
+    if bomb_spawn_timer > 200:  # 약 2초마다 폭탄 추가 생성
         for _ in range(5):  # 한 번에 5개의 폭탄 생성
             new_bomb = Bomb(random.randint(30, 800 - 30), 450 - 10)
             game_world.add_object(new_bomb, 2)
@@ -94,12 +105,10 @@ def update():
 
         bomb_spawn_timer = 0
 
-    # # 폭탄이 아래로 계속 떨어지게 설정
-    # for bomb in game_world.objects_at_layer(2):  # Layer 2에 있는 객체 검사
-    #     if isinstance(bomb, Bomb):
-    #         bomb.y -= 5  # 떨어지는 속도 조절
-    #         if bomb.y < 0:  # 화면 밖으로 나가면 제거
-    #             game_world.remove_object(bomb)
+    global hp_objects  # 전역 hp_objects 리스트를 수정할 수 있도록 선언
+    while len(hp_objects) > server.boy.hp:
+        last_hp = hp_objects.pop()  # 리스트에서 마지막 HP 제거
+        game_world.remove_object(last_hp)  # 게임 월드에서 제거
 
     # 충돌 처리
     game_world.handle_collisions()

@@ -44,10 +44,10 @@ class Snail:
         draw_rectangle(*self.get_bb())
         if self.dir == -1:
             self.image.clip_draw(int(self.frame) , self.action ,
-                                 41 , 42 , self.x, self.y, self.size * 17, self.size*17)
+                                 45 , 42 , self.x, self.y, self.size * 20, self.size*20)
         elif self.dir == 1:
             self.image.clip_composite_draw(int(self.frame), self.action,
-                                 41, 42, 0, 'h', self.x, self.y, self.size*17, self.size*17)
+                                 45, 42, 0, 'h', self.x, self.y, self.size*20, self.size*20)
         pass
 
     def get_bb(self):
