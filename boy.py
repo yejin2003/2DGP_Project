@@ -18,15 +18,15 @@ class Idle:
     @staticmethod
     def enter(boy, e):
         boy.cur_state = Idle
+        boy.action=10
+
+        if start_event(e):
+            boy.dir=1
+
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
-            boy.action = 10
             boy.dir = boy.dir1  # dir1 값으로 Idle 상태에서 방향 설정
-        if isinstance(boy.state_machine.cur_state, Jump):  # Run 상태에서 전환된 경우
-            boy.dir = boy.dir1  # Run 상태의 방향을 유지
-            boy.action=10
         else:
             boy.frame = 2
-            boy.action=10
         boy.wait_time = get_time()
 
     @staticmethod
@@ -141,6 +141,7 @@ class Jump:
 
     @staticmethod
     def exit(boy, e):
+        #boy.dir=1
         pass
 
     @staticmethod

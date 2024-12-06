@@ -51,7 +51,7 @@ class Snake:
         pass
 
     def get_bb(self):
-        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
+        return self.x - 15, self.y - 10, self.x + 15, self.y + 10
         pass
 
     def shrink(self):
