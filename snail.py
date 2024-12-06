@@ -16,7 +16,7 @@ class Snail:
         self.x, self.y= x,y
         self.frame = 0
         self.action = 4
-        self.speed= random.uniform(0.5,2.0)
+        self.speed= random.uniform(0.5,1.5)
         self.size=2
         self.range=28
         self.dir = -1
@@ -24,7 +24,7 @@ class Snail:
         self.on_ground= False
         self.image = load_image('img/snail_monster.png')
         self.max= 800-10
-        self.min= 500
+        self.min= 590
 
     def update(self):
 

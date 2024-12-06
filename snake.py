@@ -16,15 +16,15 @@ class Snake:
         self.x, self.y= x,y
         self.frame = 0
         self.action = 4
-        self.speed= random.uniform(0.5,2.0)
+        self.speed= random.uniform(0.5,1.5)
         self.size=2
         self.range=28
         self.dir = -1
         self.action = 3
         self.on_ground= False
         self.image = load_image('img/snake_monster.png')
-        self.max= 450
-        self.min= 100
+        self.max= 430
+        self.min= 280
 
     def update(self):
 

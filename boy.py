@@ -135,13 +135,12 @@ class Jump:
         if space_down(e): #스페이스키를 눌러서 점프 시작
             pass
         if d_down(e):
-            boy.dir=-1
-        if a_down(e):
             boy.dir=1
+        if a_down(e):
+            boy.dir=-1
 
     @staticmethod
     def exit(boy, e):
-        boy.dir1=boy.dir
         pass
 
     @staticmethod
@@ -319,4 +318,14 @@ class Boy:
                 self.last_time = get_time()  # 시간 기록
                 self.state_machine.add_event(('ATTACKED', 0))  # Attacked 상태 전환
                 print(f"충돌 발생: {group}, 현재 HP: {self.hp}, 무적 상태 시작")
+            pass
+
+        if group=='corn:boy':
+            if not self.is_Attacked:  # 무적 상태가 아닌 경우
+                if self.cur_state in (Idle, Run):  # 현재 상태 체크
+                    self.is_Attacked = True  # 무적 상태 활성화
+                    self.attacked_time = 2.0  # 무적 시간 초기화
+                    self.last_time = get_time()  # 시간 기록
+                    self.state_machine.add_event(('ATTACKED', 0))  # Attacked 상태 전환
+                    print(f"충돌 발생: {group}, 현재 HP: {self.hp}, 무적 상태 시작")
             pass

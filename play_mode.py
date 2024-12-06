@@ -7,6 +7,7 @@ import game_world
 from background import Lv1_Background
 from grass import Grass, Grass2
 from boy import Boy
+from corn import *
 import server
 from snake import *
 from snail import *
@@ -45,38 +46,23 @@ def init():
 
 
     # Create Snake objects
-    for _ in range(4):
-        snake = Snake(random.randint(200, 400), server.grass2.gy + 20)
+    for _ in range(3):
+        snake = Snake(random.randint(300, 400), server.grass2.gy + 20)
         game_world.add_object(snake, 2)
         game_world.add_collision_pair('snake:boy', snake, None)
         game_world.add_collision_pair('snake:bomb', snake, None)
-    # snakes = [Snake(random.randint(400, 600), server.grass2.gy+20) for _ in range(3)]
-    #game_world.add_objects(snakes,2)
-
     game_world.add_collision_pair('grass:boy', server.boy, None)
-
-    # for snake in snakes:
-    #     game_world.add_collision_pair('snake:boy', snake, None)
-    #     game_world.add_collision_pair('snake:bomb', snake, None)
     game_world.add_collision_pair('snake:boy', None, server.boy)
 
     global snail
-    # snail_positions = [630 + i * 50 for i in range(3)]  # 5 snails, 40 units apart
-    # snailes = [Snail(x, server.grass2.gy + 20) for x in snail_positions]
-    # # snailes= [Snail(random.randint(600, 800-10), server.grass2.gy+20) for _ in range(3)]
-    # game_world.add_objects(snailes,2)
-
-    for _ in range(4):
-        snail = Snail(random.randint(500, 800-10), server.grass2.gy + 20)
+    for _ in range(3):
+        snail = Snail(random.randint(700, 800-10), server.grass2.gy + 20)
         game_world.add_object(snail, 2)
         game_world.add_collision_pair('snail:boy', snail, None)
         game_world.add_collision_pair('snail:bomb', snail, None)
-
-    # for snail in snailes:
-    #     game_world.add_collision_pair('snail:boy', snail, None)
-    #     game_world.add_collision_pair('snail:bomb', snail, None)
     game_world.add_collision_pair('snail:boy', None, server.boy)
 
+    #초기 폭탄
     global bombs
     bombs=[Bomb(random. randint(10, 700),450-10) for _ in range(3)]
     game_world.add_objects(bombs, 2)
@@ -97,6 +83,15 @@ def init():
     x_positions = np.linspace(20, 80, num=3)
     hp_objects = [HP(x, 430) for x in x_positions]
     game_world.add_objects(hp_objects, 3)
+
+    global corns
+    corns=[Corn(150,server.grass2.gy+25), Corn(450,server.grass2.gy+25)]
+    game_world.add_objects(corns, 2)
+
+    for corn in corns:
+        game_world.add_collision_pair('corn:boy', corn, None)
+    game_world.add_collision_pair('corn:boy', None, server.boy)
+
 
 def update():
     global bomb_spawn_timer
