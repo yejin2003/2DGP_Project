@@ -6,11 +6,13 @@ screen_width, screen_height = 800, 450
 
 class Lv1_Background():
     def __init__(self):
+        self.bgm = load_music('sound/play_mode1.mp3')
         self.image =  load_image('img/Lv1_background.png')
         self.cw = get_canvas_width()
         self.ch = get_canvas_height()
         self.w = self.image.w
         self.h = self.image.h
+        self.bgm.repeat_play()
         pass
 
 
@@ -26,4 +28,5 @@ class Lv1_Background():
 
 
     def clear(self):
+        self.bgm.stop()
         pass

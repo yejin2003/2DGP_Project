@@ -162,6 +162,7 @@ def update():
     if server.boy.hp <= 0:
         print("Game Over: HP depleted!")
         running = False
+        server.background.clear()
         game_framework.change_mode(fail_mode)
         return
 
@@ -170,6 +171,7 @@ def update():
 
     if not snakes_remaining and not snails_remaining:
         print("Success: All enemies defeated!")
+        server.background.clear()
         game_framework.change_mode(success_mode)  # success_mode로 전환
         return
 
@@ -177,6 +179,7 @@ def update():
     if elapsed_time >= 30:
         print("Game Over: Time's up!")
         running = False  # 게임 루프 종료
+        server.background.clear()
         game_framework.change_mode(fail_mode)
     # 충돌 처리
     game_world.handle_collisions()
