@@ -90,6 +90,7 @@ class Run:
 class Attack:
     @staticmethod
     def enter(boy, e):
+        Boy.Attack_sound.play()
         boy.cur_state = Attack
         boy.is_Attack=True
         if isinstance(boy.state_machine.cur_state, Run):  # Run 상태에서 전환된 경우
@@ -173,6 +174,7 @@ class Jump:
 class Attacked:
     @staticmethod
     def enter(boy, e):
+        Boy.Attacked_sound.play()
         boy.cur_state = Attacked
         boy.start_time=get_time()
         boy.is_moving=False
@@ -236,6 +238,8 @@ class Attacked:
         pass
 
 class Boy:
+    Attacked_sound=None
+    Attack_sound=None
     def __init__(self):
         self.x, self.y = 20, server.grass2.gy+30
         self.max = 800 - 10
@@ -268,6 +272,14 @@ class Boy:
             }
         )
 
+        if not Boy.Attacked_sound:
+            Boy.Attacked_sound=load_wav('sound/attacked.wav')
+            Boy.Attacked_sound.set_volume(60)
+
+        if not Boy.Attack_sound:
+            Boy.Attack_sound=load_wav('sound/attack.wav')
+            Boy.Attack_sound.set_volume(60)
+
     def update(self):
         self.state_machine.update()
         if self.x <= self.min:  # 최소 경계
@@ -288,7 +300,7 @@ class Boy:
 
     def get_bb(self):
         # fill here
-        return self.x - 20, self.y - 30, self.x + 20, self.y + 40
+        return self.x - 15, self.y - 30, self.x + 15, self.y + 40
         pass
 
     def attacked_back(self):
@@ -303,13 +315,15 @@ class Boy:
         if group in ('snake:boy', 'snail:boy'):  # snake와 snail 공통 처리
             if not self.is_Attacked:  # 무적 상태가 아닌 경우
                 if self.cur_state in (Idle, Run):  # 현재 상태 체크
+                    # Boy.Attacked_sound.play()
                     self.is_Attacked = True  # 무적 상태 활성화
                     self.attacked_time = 2.0  # 무적 시간 초기화
                     self.last_time = get_time()  # 시간 기록
                     self.state_machine.add_event(('ATTACKED', 0))  # Attacked 상태 전환
                     print(f"충돌 발생: {group}, 현재 HP: {self.hp}, 무적 상태 시작")
 
-            if self.cur_state == Attack:  # 공격 상태인 경우
+            if self.cur_state == Attack:
+                # Boy.Attack_sound.play()# 공격 상태인 경우
                 print(f"소년의 공격 성공: {group}")
                 other.shrink()  # 다른 객체에 공격 효과 적용
 
