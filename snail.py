@@ -51,11 +51,14 @@ class Snail:
         pass
 
     def get_bb(self):
-        return self.x - 15, self.y - 10, self.x + 15, self.y + 10
+        return self.x - 18, self.y - 10, self.x + 18, self.y + 10
         pass
 
     def shrink(self):
-        game_world.remove_object(self)
+        if self in game_world.all_objects():  # 객체가 실제로 존재하는지 확인
+            game_world.remove_object(self)
+        else:
+            print("Error: Snake object not found in game_world!")
 
     def handle_collision(self, group, other):
         if group == 'snail:boy':

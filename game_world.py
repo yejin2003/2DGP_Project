@@ -73,9 +73,21 @@ def collide(a, b):
     return True
 
 def handle_collisions():
+    # for group, pairs in collision_pairs.items():
+    #     for a in pairs[0]:
+    #         for b in pairs[1]:
+    #             if collide(a,b):
+    #                 a.handle_collision(group,b)
+    #                 b.handle_collision(group,a)
     for group, pairs in collision_pairs.items():
         for a in pairs[0]:
             for b in pairs[1]:
-                if collide(a,b):
-                    a.handle_collision(group,b)
-                    b.handle_collision(group,a)
+                if collide(a, b):
+                    if hasattr(a, 'handle_collision'):
+                        a.handle_collision(group, b)
+                    if hasattr(b, 'handle_collision'):
+                        b.handle_collision(group, a)
+
+                    # 충돌 후 제거된 객체를 다시 처리하지 않도록 방지
+                    if a not in all_objects() or b not in all_objects():
+                        break  # 충돌 처리 종료

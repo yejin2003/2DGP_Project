@@ -55,4 +55,24 @@ class Bomb:
             if not self.removed:
                 game_world.remove_object(self)
                 self.removed=True
+
+        if group=='snail2:bomb':
+            if not self.removed:
+                game_world.remove_object(self)
+                self.removed=True
             pass
+
+        if group=='snake2:bomb':
+            if not self.removed:
+                game_world.remove_object(self)
+                self.removed=True
+        if group=='snail3:bomb':
+            if not self.removed:
+                game_world.remove_object(self)
+                self.removed=True
+            pass
+
+        if group=='snake3:bomb':
+            if not self.removed:
+                game_world.remove_object(self)
+                self.removed=True

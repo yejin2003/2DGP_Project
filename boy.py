@@ -199,8 +199,6 @@ class Attacked:
 
         if boy.hp <= 0:  # HP가 0일 경우 게임 종료
             print("게임 종료")
-            running=False
-            game_framework.change_mode(fail_mode)
         pass
 
     @staticmethod
@@ -296,6 +294,7 @@ class Boy:
             self.cur_state.enter(self.boy, event)
 
     def draw(self):
+        draw_rectangle(*self.get_bb())
         self.state_machine.draw()
 
     def get_bb(self):
@@ -313,6 +312,35 @@ class Boy:
             self.on_ground = True
 
         if group in ('snake:boy', 'snail:boy'):  # snake와 snail 공통 처리
+            if not self.is_Attacked:  # 무적 상태가 아닌 경우
+                if self.cur_state in (Idle, Run):  # 현재 상태 체크
+                    # Boy.Attacked_sound.play()
+                    self.is_Attacked = True  # 무적 상태 활성화
+                    self.attacked_time = 2.0  # 무적 시간 초기화
+                    self.last_time = get_time()  # 시간 기록
+                    self.state_machine.add_event(('ATTACKED', 0))  # Attacked 상태 전환
+                    print(f"충돌 발생: {group}, 현재 HP: {self.hp}, 무적 상태 시작")
+
+            if self.cur_state == Attack:
+                # Boy.Attack_sound.play()# 공격 상태인 경우
+                print(f"소년의 공격 성공: {group}")
+                other.shrink()  # 다른 객체에 공격 효과 적용
+        if group in ('snake2:boy', 'snail2:boy'):  # snake와 snail 공통 처리
+            if not self.is_Attacked:  # 무적 상태가 아닌 경우
+                if self.cur_state in (Idle, Run):  # 현재 상태 체크
+                    # Boy.Attacked_sound.play()
+                    self.is_Attacked = True  # 무적 상태 활성화
+                    self.attacked_time = 2.0  # 무적 시간 초기화
+                    self.last_time = get_time()  # 시간 기록
+                    self.state_machine.add_event(('ATTACKED', 0))  # Attacked 상태 전환
+                    print(f"충돌 발생: {group}, 현재 HP: {self.hp}, 무적 상태 시작")
+
+            if self.cur_state == Attack:
+                # Boy.Attack_sound.play()# 공격 상태인 경우
+                print(f"소년의 공격 성공: {group}")
+                other.shrink()  # 다른 객체에 공격 효과 적용
+
+        if group in ('snake3:boy', 'snail3:boy'):  # snake와 snail 공통 처리
             if not self.is_Attacked:  # 무적 상태가 아닌 경우
                 if self.cur_state in (Idle, Run):  # 현재 상태 체크
                     # Boy.Attacked_sound.play()

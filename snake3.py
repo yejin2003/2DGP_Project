@@ -10,13 +10,13 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 11
 
-class Snake:
+class Snake3:
     def __init__(self,x,y):
         import server
         self.x, self.y= x,y
         self.frame = 0
         self.action = 4
-        self.speed= random.uniform(0.5,1.5)
+        self.speed= random.uniform(2.5,3.0)
         self.size=2
         self.range=28
         self.dir = -1
@@ -61,8 +61,8 @@ class Snake:
             print("Error: Snake object not found in game_world!")
 
     def handle_collision(self, group, other):
-        if group == 'snake:boy':
+        if group == 'snake3:boy':
             print("충돌")
             pass
-        if group=='snake:bomb':
+        if group=='snake3:bomb':
             pass

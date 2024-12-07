@@ -3,6 +3,7 @@ from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE, SDLK_RETURN
 
 import game_framework
 import play_mode
+import title_mode
 
 
 def init():
@@ -24,9 +25,7 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN:
-            if event.key == SDLK_RETURN:  # Enter 키
-                game_framework.change_mode(play_mode)  # play_mode로 전환
-            elif event.key == SDLK_ESCAPE:  # ESC 키
+            if event.key == SDLK_ESCAPE:  # ESC 키
                 game_framework.quit()  # 게임 종료
 
 

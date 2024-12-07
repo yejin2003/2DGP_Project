@@ -5,15 +5,15 @@ from pico2d import *
 import random
 import game_framework
 import game_world
-import play_mode2
+import play_mode3
 import success_mode
-from background import Lv1_Background
+from background2 import Lv2_Background
 from grass import Grass, Grass2
 from boy import Boy
 from corn import *
 import server
-from snake import *
-from snail import *
+from snake2 import *
+from snail2 import *
 from bomb import *
 from hp import *
 import time
@@ -63,7 +63,7 @@ def init():
     font_object = FontObject(font, 650, 430, "Time: 30")  # 초기 텍스트
     game_world.add_object(font_object, 3)  # 레이어 3에 추가
 
-    server.background = Lv1_Background()
+    server.background = Lv2_Background()
     game_world.add_object(server.background, 0)
 
     server.grass = Grass()
@@ -76,24 +76,22 @@ def init():
     game_world.add_object(server.boy, 2)
 
 
-    global snake
-
-    # Create Snake objects
-    for _ in range(3):
-        snake = Snake(random.randint(300, 400), server.grass2.gy + 20)
-        game_world.add_object(snake, 2)
-        game_world.add_collision_pair('snake:boy', snake, None)
-        game_world.add_collision_pair('snake:bomb', snake, None)
+    global snake2
+    for _ in range(5):
+        snake2 = Snake2(random.randint(300, 400), server.grass2.gy + 20)
+        game_world.add_object(snake2, 2)
+        game_world.add_collision_pair('snake2:boy', snake2, None)
+        game_world.add_collision_pair('snake2:bomb', snake2, None)
     game_world.add_collision_pair('grass:boy', server.boy, None)
-    game_world.add_collision_pair('snake:boy', None, server.boy)
+    game_world.add_collision_pair('snake2:boy', None, server.boy)
 
-    global snail
-    for _ in range(3):
-        snail = Snail(random.randint(700, 800-10), server.grass2.gy + 20)
-        game_world.add_object(snail, 2)
-        game_world.add_collision_pair('snail:boy', snail, None)
-        game_world.add_collision_pair('snail:bomb', snail, None)
-    game_world.add_collision_pair('snail:boy', None, server.boy)
+    global snail2
+    for _ in range(5):
+        snail2 = Snail2(random.randint(700, 800-10), server.grass2.gy + 20)
+        game_world.add_object(snail2, 2)
+        game_world.add_collision_pair('snail2:boy', snail2, None)
+        game_world.add_collision_pair('snail2:bomb', snail2, None)
+    game_world.add_collision_pair('snail2:boy', None, server.boy)
 
     #초기 폭탄
     global bombs
@@ -103,8 +101,8 @@ def init():
     for bomb in bombs:
         game_world.add_collision_pair('bomb:boy', bomb, None)
         game_world.add_collision_pair('bomb:grass', bomb, None)
-        game_world.add_collision_pair('snail:bomb', None, bomb)
-        game_world.add_collision_pair('snake:bomb', None, bomb)
+        game_world.add_collision_pair('snail2:bomb', None, bomb)
+        game_world.add_collision_pair('snake2:bomb', None, bomb)
     game_world.add_collision_pair('bomb:boy', None, server.boy)
     game_world.add_collision_pair('bomb:grass', None, server.grass2)
 
@@ -135,7 +133,7 @@ def update():
     # 폭탄 생성 타이머 증가
     bomb_spawn_timer += 1
     if bomb_spawn_timer > 200:  # 약 2초마다 폭탄 추가 생성
-        for _ in range(3):  # 한 번에 5개의 폭탄 생성
+        for _ in range(4):  # 한 번에 5개의 폭탄 생성
             new_bomb = Bomb(random.randint(30, 800 - 30), 450 - 10)
             game_world.add_object(new_bomb, 2)
 
@@ -144,8 +142,8 @@ def update():
             game_world.add_collision_pair('bomb:boy', None, server.boy)
             game_world.add_collision_pair('bomb:grass', new_bomb, None)
             game_world.add_collision_pair('bomb:grass', None, server.grass2)
-            game_world.add_collision_pair('snail:bomb', None, new_bomb)
-            game_world.add_collision_pair('snake:bomb', None, new_bomb)
+            game_world.add_collision_pair('snail2:bomb', None, new_bomb)
+            game_world.add_collision_pair('snake2:bomb', None, new_bomb)
 
         bomb_spawn_timer = 0
 
@@ -163,13 +161,13 @@ def update():
         game_framework.change_mode(fail_mode)
         return
 
-    snakes_remaining = any(isinstance(obj, Snake) for obj in game_world.all_objects())
-    snails_remaining = any(isinstance(obj, Snail) for obj in game_world.all_objects())
+    snakes_remaining = any(isinstance(obj, Snake2) for obj in game_world.all_objects())
+    snails_remaining = any(isinstance(obj, Snail2) for obj in game_world.all_objects())
 
     if not snakes_remaining and not snails_remaining:
         print("Success: All enemies defeated!")
         server.background.clear()
-        game_framework.change_mode(play_mode2)  # success_mode로 전환
+        game_framework.change_mode(play_mode3)  # success_mode로 전환
         return
 
     elapsed_time = time.time() - start_time
