@@ -28,7 +28,7 @@ class Grass2:
         pass
 
     def draw(self):
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         screen_width = 800  # 화면의 너비 (필요에 따라 변경)
         tile_width = 107  # 타일 너비
 

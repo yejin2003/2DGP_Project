@@ -11,7 +11,7 @@ class Corn:
         pass
 
     def draw(self):
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         self.image.clip_draw(0, 0, 845, 1529, self.x, self.y, 25, 45)
 
     def get_bb(self):

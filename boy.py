@@ -294,7 +294,7 @@ class Boy:
             self.cur_state.enter(self.boy, event)
 
     def draw(self):
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         self.state_machine.draw()
 
     def get_bb(self):

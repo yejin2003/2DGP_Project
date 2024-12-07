@@ -41,7 +41,7 @@ class Snail2:
         pass
 
     def draw(self):
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         if self.dir == -1:
             self.image.clip_draw(int(self.frame) , self.action ,
                                  45 , 42 , self.x, self.y, self.size * 20, self.size*20)

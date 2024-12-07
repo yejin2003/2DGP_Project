@@ -24,7 +24,7 @@ class Bomb:
         self.y -= self.speed
 
     def draw(self):
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         self.image.clip_draw(0,0,106, 114, self.x, self.y, 40, 40)
 
     def get_bb(self):
@@ -66,6 +66,7 @@ class Bomb:
             if not self.removed:
                 game_world.remove_object(self)
                 self.removed=True
+
         if group=='snail3:bomb':
             if not self.removed:
                 game_world.remove_object(self)
