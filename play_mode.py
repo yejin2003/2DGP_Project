@@ -1,3 +1,5 @@
+from turtledemo.penrose import start
+
 import numpy as np
 from pico2d import *
 
@@ -13,6 +15,8 @@ from snake import *
 from snail import *
 from bomb import *
 from hp import *
+import time
+import fail_mode
 
 def handle_events():
     events = get_events()
@@ -24,7 +28,9 @@ def handle_events():
 
 def init():
     global running
+    global start_time
     running = True
+    start_time=time.time()
 
     server.background = Lv1_Background()
     game_world.add_object(server.background, 0)
@@ -121,6 +127,11 @@ def update():
         last_hp = hp_objects.pop()  # 리스트에서 마지막 HP 제거
         game_world.remove_object(last_hp)  # 게임 월드에서 제거
 
+    elapsed_time = time.time() - start_time
+    if elapsed_time >= 30:
+        print("Game Over: Time's up!")
+        running = False  # 게임 루프 종료
+        game_framework.change_mode(fail_mode)
     # 충돌 처리
     game_world.handle_collisions()
     delay(0.01)
