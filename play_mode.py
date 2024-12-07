@@ -18,9 +18,23 @@ from hp import *
 import time
 import fail_mode
 
-font = None
+#font = None
 start_time = None
 time_limit = 30  # 제한 시간 30초
+
+class FontObject:
+    def __init__(self, font, x, y, text, color=(255, 255, 255)):
+        self.font = font
+        self.x = x
+        self.y = y
+        self.text = text
+        self.color = color
+
+    def update(self):
+        pass  # 업데이트가 필요 없다면 빈 함수로 유지
+
+    def draw(self):
+        self.font.draw(self.x, self.y, self.text, self.color)
 
 def handle_events():
     events = get_events()
@@ -37,7 +51,16 @@ def init():
     start_time=time.time()
 
     global font
-    font = load_font('ENCR10B.TTF', 24)
+    try:
+        font = load_font('ENCR10B.TTF', 25)  # 경로와 크기 확인
+        print(f"Font loading success")
+    except Exception as e:
+        print(f"Font loading failed: {e}")
+        font = None  # 폰트 초기화 실패
+    # font = load_font('ENCR10B.TTF', 24)
+
+    font_object = FontObject(font, 650, 430, "Time: 30")  # 초기 텍스트
+    game_world.add_object(font_object, 3)  # 레이어 3에 추가
 
     server.background = Lv1_Background()
     game_world.add_object(server.background, 0)
@@ -161,12 +184,17 @@ def update():
 
 def draw():
     clear_canvas()
-    # 남은 시간 계산 및 표시
+
+    # 남은 시간 표시 (화면 우측 상단)
+    # font.draw(700, 450, f"Time: {30 - (get_time() - start_time)}", (255, 255, 255))  # 흰색 글씨로 표시
+
     elapsed_time = time.time() - start_time
     remaining_time = max(0, int(time_limit - elapsed_time))  # 0초 미만 방지
 
-    # 남은 시간 표시 (화면 우측 상단)
-    font.draw(700, 450, f'Time: {remaining_time}', (255, 255, 255))  # 흰색 글씨로 표시
+    # 폰트 객체 업데이트
+    for obj in game_world.objects_at_layer(3):  # 레이어 3에서 객체 탐색
+        if isinstance(obj, FontObject):
+            obj.text = f"Time: {remaining_time}"  # 남은 시간 업데이트
     game_world.render()
     update_canvas()
     delay(0.01)
