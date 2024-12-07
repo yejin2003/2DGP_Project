@@ -20,6 +20,10 @@ def add_object(o, depth = 0):
 def add_objects(ol, depth = 0):
     world[depth] += ol
 
+def all_objects():
+    for layer in world:  # 각 레이어를 순회
+        for o in layer:  # 레이어 내의 객체를 순회
+            yield o  # 객체를 반환
 
 def update():
     for layer in world:

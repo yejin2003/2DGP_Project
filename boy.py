@@ -2,6 +2,7 @@ from fontTools.merge.util import current_time
 from pico2d import *
 import math
 
+import fail_mode
 import game_framework
 import game_world
 import grass
@@ -196,7 +197,8 @@ class Attacked:
 
         if boy.hp <= 0:  # HP가 0일 경우 게임 종료
             print("게임 종료")
-            game_framework.quit()
+            running=False
+            game_framework.change_mode(fail_mode)
         pass
 
     @staticmethod

@@ -1,11 +1,11 @@
 from turtledemo.penrose import start
-
 import numpy as np
 from pico2d import *
 
 import random
 import game_framework
 import game_world
+import success_mode
 from background import Lv1_Background
 from grass import Grass, Grass2
 from boy import Boy
@@ -17,6 +17,10 @@ from bomb import *
 from hp import *
 import time
 import fail_mode
+
+font = None
+start_time = None
+time_limit = 30  # 제한 시간 30초
 
 def handle_events():
     events = get_events()
@@ -31,6 +35,9 @@ def init():
     global start_time
     running = True
     start_time=time.time()
+
+    global font
+    font = load_font('ENCR10B.TTF', 24)
 
     server.background = Lv1_Background()
     game_world.add_object(server.background, 0)
@@ -124,8 +131,24 @@ def update():
 
     global hp_objects  # 전역 hp_objects 리스트를 수정할 수 있도록 선언
     while len(hp_objects) > server.boy.hp:
-        last_hp = hp_objects.pop()  # 리스트에서 마지막 HP 제거
-        game_world.remove_object(last_hp)  # 게임 월드에서 제거
+        if hp_objects:  # hp_objects가 비어 있지 않은지 확인
+            last_hp = hp_objects.pop()  # 리스트에서 마지막 HP 제거
+            if last_hp in game_world.all_objects():  # 게임 월드에 실제로 존재하는지 확인
+                game_world.remove_object(last_hp)  # 게임 월드에서 제거
+
+    if server.boy.hp <= 0:
+        print("Game Over: HP depleted!")
+        running = False
+        game_framework.change_mode(fail_mode)
+        return
+
+    snakes_remaining = any(isinstance(obj, Snake) for obj in game_world.all_objects())
+    snails_remaining = any(isinstance(obj, Snail) for obj in game_world.all_objects())
+
+    if not snakes_remaining and not snails_remaining:
+        print("Success: All enemies defeated!")
+        game_framework.change_mode(success_mode)  # success_mode로 전환
+        return
 
     elapsed_time = time.time() - start_time
     if elapsed_time >= 30:
@@ -138,6 +161,12 @@ def update():
 
 def draw():
     clear_canvas()
+    # 남은 시간 계산 및 표시
+    elapsed_time = time.time() - start_time
+    remaining_time = max(0, int(time_limit - elapsed_time))  # 0초 미만 방지
+
+    # 남은 시간 표시 (화면 우측 상단)
+    font.draw(700, 450, f'Time: {remaining_time}', (255, 255, 255))  # 흰색 글씨로 표시
     game_world.render()
     update_canvas()
     delay(0.01)
