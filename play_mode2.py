@@ -77,7 +77,7 @@ def init():
 
 
     global snake2
-    for _ in range(5):
+    for _ in range(4):
         snake2 = Snake2(random.randint(300, 400), server.grass2.gy + 20)
         game_world.add_object(snake2, 2)
         game_world.add_collision_pair('snake2:boy', snake2, None)
@@ -86,7 +86,7 @@ def init():
     game_world.add_collision_pair('snake2:boy', None, server.boy)
 
     global snail2
-    for _ in range(5):
+    for _ in range(4):
         snail2 = Snail2(random.randint(700, 800-10), server.grass2.gy + 20)
         game_world.add_object(snail2, 2)
         game_world.add_collision_pair('snail2:boy', snail2, None)
@@ -95,7 +95,7 @@ def init():
 
     #초기 폭탄
     global bombs
-    bombs=[Bomb(random. randint(10, 700),450-10) for _ in range(3)]
+    bombs=[Bomb(random. randint(10, 700),450-10) for _ in range(4)]
     game_world.add_objects(bombs, 2)
 
     for bomb in bombs:

@@ -132,7 +132,7 @@ def update():
     # 폭탄 생성 타이머 증가
     bomb_spawn_timer += 1
     if bomb_spawn_timer > 200:  # 약 2초마다 폭탄 추가 생성
-        for _ in range(4):  # 한 번에 5개의 폭탄 생성
+        for _ in range(5):  # 한 번에 5개의 폭탄 생성
             new_bomb = Bomb(random.randint(30, 800 - 30), 450 - 10)
             game_world.add_object(new_bomb, 2)
 
