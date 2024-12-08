@@ -82,7 +82,7 @@ def init():
         game_world.add_collision_pair('snake3:boy', snake3, None)
         game_world.add_collision_pair('snake3:bomb', snake3, None)
     game_world.add_collision_pair('grass:boy', server.boy, None)
-    game_world.add_collision_pair('snake2:boy', None, server.boy)
+    game_world.add_collision_pair('snake3:boy', None, server.boy)
 
     global snail3
     for _ in range(5):
@@ -90,7 +90,7 @@ def init():
         game_world.add_object(snail3, 2)
         game_world.add_collision_pair('snail3:boy', snail3, None)
         game_world.add_collision_pair('snail3:bomb', snail3, None)
-    game_world.add_collision_pair('snail2:boy', None, server.boy)
+    game_world.add_collision_pair('snail3:boy', None, server.boy)
 
     #초기 폭탄
     global bombs
